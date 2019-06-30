@@ -1,0 +1,13 @@
+[dependsrepo]
+name=Samba repo - $basearch
+baseurl=file://@REPOBASEDIR@/dependsrepo/@RELEASEDIR@/$releasever/$basearch
+enabled=0
+gpgcheck=0
+metadata_expire=1
+
+[dependsrepo-source]
+name=Samba repo - Source
+baseurl=file://@REPOBASEDIR@/dependsrepo/@RELEASEDIR@/$releasever/SRPMS/
+enabled=0
+gpgcheck=0
+metadata_expire=1
