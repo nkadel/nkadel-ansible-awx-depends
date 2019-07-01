@@ -5,21 +5,21 @@
 %define name six
 %define version 1.12.0
 %define unmangled_version 1.12.0
-%define unmangled_version 1.12.0
 %define release 1
 
 Summary: Python 2 and 3 compatibility utilities
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
 Name: %{?scl_prefix}six
 Version: %{version}
 Release: %{release}
-Source0: six-%{unmangled_version}.tar.gz
+Source0: https://pypi.io/packages/source/s/six/six-%{unmangled_version}.tar.gz
 License: MIT
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/six-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
+
 BuildArch: noarch
+BuildRequires:  %{?scl_prefix}python-devel
+%{?scl:Requires: %{scl}-runtime}
 Vendor: Benjamin Peterson <benjamin@python.org>
 Packager: Martin Juhl <m@rtinjuhl.dk>
 Url: https://github.com/benjaminp/six
@@ -62,32 +62,24 @@ list: https://mail.python.org/mailman/listinfo/python-porting
 
 
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n six-%{unmangled_version} -n six-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -n six-%{unmangled_version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
 set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
 set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 %{?scl:EOF}
-
 
 %clean
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
 rm -rf $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %files -f INSTALLED_FILES
 %defattr(-,root,root)
