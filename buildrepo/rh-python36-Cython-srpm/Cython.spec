@@ -34,7 +34,6 @@ Source:         https://github.com/cython/cython/archive/%{version}/%{srcname}-%
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1406533
 # https://github.com/cython/cython/pull/1560
-#Patch0001:      0001-fix-typo-in-Compiler-Options.py.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1406905
 # https://github.com/cython/cython/pull/483
 Patch0002:      0001-Check-sys.path-for-.pxi-files-too.patch
@@ -111,6 +110,7 @@ rm -rfv %{buildroot}%{python_sitearch}/__pycache__
 - Port from sclo-python35
 - Update to 0.28.4
 - Use "?scl_prefix" instead of "scl_prefix" to allos SRPM building on plain RHEL 7
+- Discard 0001-fix-typo-in-Compiler-Options.py.patch
 
 * Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.25.2-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
