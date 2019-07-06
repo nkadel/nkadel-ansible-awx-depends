@@ -1,1 +1,1 @@
-../Makefile.repo
+../Makefile.sclpy36
