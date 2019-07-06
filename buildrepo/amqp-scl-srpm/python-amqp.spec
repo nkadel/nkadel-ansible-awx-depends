@@ -30,7 +30,27 @@ BuildArch:      noarch
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-vine >= 1.1.3
 %if %{with_dnf}
+# Manually added for test
+Suggests:       %{?scl_prefix}python-case >= 1.3.1
+Suggests:       %{?scl_prefix}python-pytest >= 3.0
+Suggests:       %{?scl_prefix}python-pytest-sugar >= 0.9.1
+# Manually added for test-ci
+Suggests:       %{?scl_prefix}python-pytest-cov
+Suggests:       %{?scl_prefix}python-codecov
+# Manually added for git+https://github.com/celery/sphinx_celery.git
+#Suggests:       %{?scl_prefix}python-celery
+# Manually added for pkgutils
+Suggests:       %{?scl_prefix}python-setuptools >= 20.6.7
+Suggests:       %{?scl_prefix}python-wheel >= 0.29.0
+Suggests:       %{?scl_prefix}python-flake8 >= 2.5.4
+Suggests:       %{?scl_prefix}python-flakeplus >= 1.1
+Suggests:       %{?scl_prefix}python-tox >= 2.3.1
+Suggests:       %{?scl_prefix}python-sphinx2rst >= 1.0
+Suggests:       %{?scl_prefix}python-bumpversion
+Suggests:       %{?scl_prefix}python-pydocstyle = 1.1.1
 %endif # with_dnf
 
 %description
@@ -189,3 +209,6 @@ rm -rf %{buildroot}
 %{python3_sitelib}/*
 
 %changelog
+* Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 2.3.2-0
+- Update .spec with py2pack
+- Manually add Requires and Suggests
