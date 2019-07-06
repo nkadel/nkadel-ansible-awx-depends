@@ -16,6 +16,7 @@ REPOS+=dependsrepo/el/7
 REPODIRS := $(patsubst %,%/x86_64/repodata,$(REPOS)) $(patsubst %,%/SRPMS/repodata,$(REPOS))
 
 CFGS+=dependsrepo-7-x86_64.cfg
+CFGS+=sclpy36-7-x86_64.cfg
 
 # Link from /etc/mock
 MOCKCFGS+=epel-7-x86_64.cfg
@@ -25,13 +26,14 @@ all:: $(MOCKCFGS)
 all:: $(REPODIRS)
 all:: $(DEPENDSPKGS)
 
-all install clean getsrc:: FORCE
+all install clean:: FORCE
 	@for name in *srpm; do \
 	     (cd $$name && $(MAKE) $(MFLAGS) $@); \
 	done  
 
-# Build for locacl OS
-build:: FORCE
+# Build and getsrc for locacl OS require scl-utils
+build getsrc:: /etc/rpm/macros.scl
+build getsrc:: FORCE
 	@for name in *srpm; do \
 	     (cd $$name && $(MAKE) $(MFLAGS) $@); \
 	done
@@ -44,22 +46,11 @@ build:: FORCE
 
 # Dependencies of libraries on other libraries for compilation
 
-compat-gnutls34-3.x-srpm:: compat-nettle32-3.x-srpm
+# python-lxml requires Cython
+rh-python36-python-lxml-srpm:: #rh-python36-Cython-srpm
 
-libtevent-0.9.x-srpm:: libtalloc-2.1.x-srpm
-
-libldb-1.5.x-srpm:: libtalloc-2.1.x-srpm
-libldb-1.5.x-srpm:: libtdb-1.3.x-srpm
-libldb-1.5.x-srpm:: libtevent-0.9.x-srpm
-
-# Needed for with_mitkrb5
-samba-4.10.x-srpm:: compat-gnutls34-3.x-srpm
-
-# Samba rellies on all the othe components
-samba-4.10.x-srpm:: libtalloc-2.1.x-srpm
-samba-4.10.x-srpm:: libldb-1.5.x-srpm
-samba-4.10.x-srpm:: libtevent-0.9.x-srpm
-samba-4.10.x-srpm:: libtdb-1.3.x-srpm
+# Lots and lots of dependencies, consider using built-in release
+#rh-python36-python-ansible-srpm::
 
 # Actually build in directories
 $(SAMBAPKGS):: FORCE
@@ -100,6 +91,15 @@ dependsrepo-7-x86_64.cfg: /etc/mock/epel-7-x86_64.cfg
 	@echo '#cost=2000' >> $@
 	@echo '"""' >> $@
 	@uniq -u $@ > $@.out
+	@mv $@.out $@
+
+# Enable rh-python36 SCL builds, do not include local packages
+sclpy36-7-x86_64.cfg: /etc/mock/epel-7-x86_64.cfg
+	@echo Generating $@ from $?
+	@cat $? > $@
+	@sed -i 's/epel-7-x86_64/sclpy36-7-x86_64/g' $@
+	@sed -i "s/= 'install @buildsys-build'/= 'install @buildsys-build rh-python36-build'/g" $@
+	@sed -i 's/^includepkgs=/#includepkgs=/g' $@
 	@mv $@.out $@
 
 $(MOCKCFGS)::
