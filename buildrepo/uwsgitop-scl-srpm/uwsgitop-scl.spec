@@ -1,146 +1,69 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-uwsgitop
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name uwsgitop
-%define version 0.10
-%define unmangled_version 0.10
-%define unmangled_version 0.10
-%define release 1
+%global pypi_name uwsgitop
 
-Summary: uWSGI top-like interface
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}%{pkg_name}
-Version: %{version}
-Release: %{release}
-Source0: uwsgitop-%{unmangled_version}.tar.gz
-License: MIT
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{pkg_name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Riccardo Magliocchetti <riccardo.magliocchetti@gmail.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        0.10
+Release:        0%{?dist}
+#Url:            
+Summary:        uWSGI top-like interface
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-simplejson
+Requires:       %{?scl_prefix}python-argparse
+%if %{with_dnf}
+%endif # with_dnf
+%{?python_provide:%python_provide python-%{pypi_name}}
 
 %description
-uwsgitop
-========
-
-``uwsgitop`` is a top-like command that uses the uWSGI Stats Server to
+uwsgitop is a top-like command that uses the uWSGI Stats Server to
 monitor your uwsgi application.
 
-To use uWSGI Stat Server simply use the ``stats`` option followed by
-a valid socket address, for example::
-
-    uwsgi --module myapp --socket :3030 --stats /tmp/stats.socket
-
-To start monitoring your application with ``uwsgitop`` call it with
-the socket address like so::
-
-    uwsgitop /tmp/stats.socket
-
-If you want the stats served over HTTP you will need to add
-the ``stats-http`` option in uWSGI::
-
-    uwsgi --module myapp --http :3030 --stats :3031 --stats-http
-
-You'll now need to call uwsgitop as::
-
-    uwsgitop http://127.0.0.1:3031
-
-Installation
-------------
-
-::
-
-    pip install uwsgitop
-
-Usage
------
-
-To display async core statistics (e.g. when using gevent) or to switch between
-core statistics display mode, press ``a``. To refresh the screen super fast press ``f``,
-and to quit, press ``q``.
-
-+--------+---------------------------------------------------------------+
-| Field  |  Description                                                  |
-+========+===============================================================+
-| WID    | Worker ID                                                     |
-+--------+---------------------------------------------------------------+
-| %      | Worker usage                                                  |
-+--------+---------------------------------------------------------------+
-| PID    | Worker PID                                                    |
-+--------+---------------------------------------------------------------+
-| REQ    | How many requests worker did since worker (re)spawn           |
-+--------+---------------------------------------------------------------+
-| RPS    | Requests per second                                           |
-+--------+---------------------------------------------------------------+
-| EXC    | Exceptions                                                    |
-+--------+---------------------------------------------------------------+
-| STATUS | Worker is busy or free to use?                                |
-+--------+---------------------------------------------------------------+
-| AVG    | Average request time                                          |
-+--------+---------------------------------------------------------------+
-| RSS    | Worker RSS (Resident Set Size, see linux memory management)   |
-+--------+---------------------------------------------------------------+
-| VSZ    | Worker VSZ (Virtual Memory Size, see linux memory management) |
-+--------+---------------------------------------------------------------+
-| TX     | How many data was transmitted by worker                       |
-+--------+---------------------------------------------------------------+
-| RunT   | How long worker is working                                    |
-+--------+---------------------------------------------------------------+
-
-Colors
-------
-
-Lines would be displayed in different colors:
-
-- default console text color, if the worker is idle
-- ``green``, if the worker is busy
-- ``magenta``, if the worker is in ``cheap`` mode
-- ``yellow``, if the worker is handling an uwsgi signal
-- ``blue``, if the worker is ``suspended``
-
-
-Remember to enable ``memory-report`` in your uwsgi configuration to see how
-much memory resources your uwsgi processes are consuming.
-
-Further Reading
----------------
-
-For more info on uWSGI Stats Server see http://projects.unbit.it/uwsgi/wiki/StatsServer
-
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n uwsgitop-%{unmangled_version} -n uwsgitop-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
+%{_bindir}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.10=0
+- Udpate .spec with py2pack
+- Add bindir
+- Add manual Requires for python-simplejson and python-argparse
