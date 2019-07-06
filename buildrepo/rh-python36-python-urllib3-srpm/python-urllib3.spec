@@ -1,29 +1,38 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-urllib3
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name urllib3
-%define version 1.24
-%define unmangled_version 1.24
-%define unmangled_version 1.24
-%define release 1
+%global pypi_name urllib3
 
-Summary: HTTP library with thread-safe connection pooling, file post, and more.
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}urllib3
-Version: %{version}
-Release: %{release}
-Source0: urllib3-%{unmangled_version}.tar.gz
-License: MIT
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/urllib3-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Andrey Petrov <andrey.petrov@shazow.net>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://urllib3.readthedocs.io/
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        1.24
+Release:        0%{?dist}
+Url:            https://urllib3.readthedocs.io/
+Summary:        HTTP library with thread-safe connection pooling, file post, and more.
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+%if %{with_dnf}
+%endif # with_dnf
+%{?python_provide:%python_provide python-%{pypi_name}}
 
 %description
 urllib3
@@ -40,7 +49,7 @@ urllib3
 .. image:: https://readthedocs.org/projects/urllib3/badge/?version=latest
         :alt: Documentation Status
         :target: https://urllib3.readthedocs.io/en/latest/
-        
+
 .. image:: https://img.shields.io/codecov/c/github/urllib3/urllib3.svg
         :alt: Coverage Status
         :target: https://codecov.io/gh/urllib3/urllib3
@@ -119,7 +128,7 @@ Maintainers
 - `@sigmavirus24 <https://github.com/sigmavirus24>`_ (Ian Cordasco)
 - `@shazow <https://github.com/shazow>`_ (Andrey Petrov)
 
-👋
+&#128075;
 
 
 Sponsorship
@@ -133,7 +142,7 @@ Sponsors include:
 - Google Cloud Platform (2018-present), sponsors `@theacodes <https://github.com/theacodes>`_'s work on an ongoing basis
 - Abbott (2018-present), sponsors `@SethMichaelLarson <https://github.com/SethMichaelLarson>`_'s work on an ongoing basis
 - Akamai (2017-present), sponsors `@haikuginger <https://github.com/haikuginger>`_'s work on an ongoing basis
-- Hewlett Packard Enterprise (2016-2017), sponsored `@Lukasa’s <https://github.com/Lukasa>`_ work on urllib3
+- Hewlett Packard Enterprise (2016-2017), sponsored `@Lukasa&#8217;s <https://github.com/Lukasa>`_ work on urllib3
 
 
 Changes
@@ -1093,33 +1102,25 @@ Changes
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n urllib3-%{unmangled_version} -n urllib3-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
