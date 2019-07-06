@@ -1,29 +1,41 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-SecretStorage
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name SecretStorage
-%define version 2.3.1
-%define unmangled_version 2.3.1
-%define unmangled_version 2.3.1
-%define release 1
+%global pypi_name SecretStorage
 
-Summary: Python bindings to FreeDesktop.org Secret Service API
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}SecretStorage
-Version: %{version}
-Release: %{release}
-Source0: SecretStorage-%{unmangled_version}.tar.gz
-License: BSD
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/SecretStorage-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Dmitry Shachnev <mitya57@gmail.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/mitya57/secretstorage
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        2.3.1
+Release:        0%{?dist}
+Url:            https://github.com/mitya57/secretstorage
+Summary:        Python bindings to FreeDesktop.org Secret Service API
+License:        BSD (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+Requires:       %{?scl_prefix}python-dbus
+Requires:       %{?scl_prefix}python-cryptography
+%if %{with_dnf}
+# Manually added for dbus-python
+Suggests:       %{?scl_prefix}python-dbus-python
+%endif # with_dnf
 
 %description
 
@@ -108,34 +120,27 @@ on GitHub_.
 .. _GitHub: https://github.com/mitya57/secretstorage
 
 
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n SecretStorage-%{unmangled_version} -n SecretStorage-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 2.3.1-0
+= Update .spec file with py2pack
+- Manually add Suggests for python-dbus-python
