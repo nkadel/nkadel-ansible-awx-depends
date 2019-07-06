@@ -1,29 +1,41 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-incremental
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name incremental
-%define version 17.5.0
-%define unmangled_version 17.5.0
-%define unmangled_version 17.5.0
-%define release 1
+%global pypi_name incremental
 
-Summary: UNKNOWN
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}incremental
-Version: %{version}
-Release: %{release}
-Source0: incremental-%{unmangled_version}.tar.gz
-License: MIT
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/incremental-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Amber Brown <hawkowl@twistedmatrix.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/twisted/incremental
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        17.5.0
+Release:        0%{?dist}
+Url:            https://github.com/twisted/incremental
+Summary:        Incremental is a small library that versions your Python projects.
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually addded
+BuildRequires:  %{?scl_prefix}python-click >= 6.0
+BuildRequires:  %{?scl_prefix}python-twisted >= 16.4.0
+%if %{with_dnf}
+%endif # with_dnf
+%{?python_provide:%python_provide python-%{pypi_name}}
 
 %description
 Incremental
@@ -137,33 +149,29 @@ Once the final version is made, it will become:
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n incremental-%{unmangled_version} -n incremental-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 17.5.0-0
+- Update spec file with py2pack
+- Manually add Requires for python-click and python-twisted
+
