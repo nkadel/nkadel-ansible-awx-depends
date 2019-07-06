@@ -1,48 +1,71 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-cryptography
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name cryptography
-%define version 2.1.4
-%define unmangled_version 2.1.4
-%define unmangled_version 2.1.4
-%define release 1
+%global pypi_name cryptography
 
-Summary: cryptography is a package which provides cryptographic recipes and primitives to Python developers.
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}cryptography
-Version: %{version}
-Release: %{release}
-Source0: cryptography-%{unmangled_version}.tar.gz
-License: BSD or Apache License, Version 2.0
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/cryptography-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-Vendor: The cryptography developers <cryptography-dev@python.org>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/pyca/cryptography
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        2.1.4
+Release:        0%{?dist}
+Url:            https://github.com/pyca/cryptography
+Summary:        cryptography is a package which provides cryptographic recipes and primitives to Python developers.
+License:        BSD or Apache License, Version 2.0 (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-idna >= 2.1
+Requires:       %{?scl_prefix}python-asn1crypto >= 0.21.0
+Requires:       %{?scl_prefix}python-six >= 1.4.1
+# Manually added for PyPy
+Requires:       %{?scl_prefix}python-cffi >= 1.7
+# Manually added to supply cffi
+Requires:       %{?scl_prefix}python-pycparser
+# Manually added For python < 3
+#Requires:       %{?scl_prefix}python-enum34
+#Requires:       %{?scl_prefix}python-ipaddress
+
+%if %{with_dnf}
+# Manually added for docstest
+Suggests:       %{?scl_prefix}python-doc8
+Suggests:       %{?scl_prefix}python-pyenchant >= 1.6.11
+Suggests:       %{?scl_prefix}python-readme_renderer >= 16.0
+Suggests:       %{?scl_prefix}python-sphinx
+Suggests:       %{?scl_prefix}python-sphinx_rtd_theme
+Suggests:       %{?scl_prefix}python-sphinxcontrib-spelling
+# Manually added for pep8test
+Suggests:       %{?scl_prefix}python-flake8
+Suggests:       %{?scl_prefix}python-flake8-import-order
+Suggests:       %{?scl_prefix}python-pep8-naming
+# Manually added for test
+Conflicts:      %{?scl_prefix}python-pytest = 3.3.0
+Suggests:       %{?scl_prefix}python-pytest >= 3.2.1
+Suggests:       %{?scl_prefix}python-pretend
+Suggests:       %{?scl_prefix}python-iso8601
+Suggests:       %{?scl_prefix}python-pytz
+Suggests:       %{?scl_prefix}python-hypothesis >= 1.11.4
+%endif # with_dnf
 
 %description
 pyca/cryptography
 =================
-
-.. image:: https://img.shields.io/pypi/v/cryptography.svg
-    :target: https://pypi.python.org/pypi/cryptography/
-    :alt: Latest Version
-
-.. image:: https://readthedocs.org/projects/cryptography/badge/?version=latest
-    :target: https://cryptography.io
-    :alt: Latest Docs
-
-.. image:: https://travis-ci.org/pyca/cryptography.svg?branch=master
-    :target: https://travis-ci.org/pyca/cryptography
-
-.. image:: https://codecov.io/github/pyca/cryptography/coverage.svg?branch=master
-    :target: https://codecov.io/github/pyca/cryptography?branch=master
-
-
 ``cryptography`` is a package which provides cryptographic recipes and
 primitives to Python developers.  Our goal is for it to be your "cryptographic
 standard library". It supports Python 2.6-2.7, Python 3.4+, and PyPy 5.3+.
@@ -50,7 +73,7 @@ standard library". It supports Python 2.6-2.7, Python 3.4+, and PyPy 5.3+.
 ``cryptography`` includes both high level recipes and low level interfaces to
 common cryptographic algorithms such as symmetric ciphers, message digests, and
 key derivation functions. For example, to encrypt something with
-``cryptography``'s high level symmetric encryption recipe:
+the ``cryptography`` high level symmetric encryption recipe:
 
 .. code-block:: pycon
 
@@ -64,61 +87,24 @@ key derivation functions. For example, to encrypt something with
     >>> f.decrypt(token)
     'A really secret message. Not for prying eyes.'
 
-You can find more information in the `documentation`_.
-
-You can install ``cryptography`` with:
-
-.. code-block:: console
-
-    $ pip install cryptography
-
-For full details see `the installation documentation`_.
-
-Discussion
-~~~~~~~~~~
-
-If you run into bugs, you can file them in our `issue tracker`_.
-
-We maintain a `cryptography-dev`_ mailing list for development discussion.
-
-You can also join ``#cryptography-dev`` on Freenode to ask questions or get
-involved.
-
-
-.. _`documentation`: https://cryptography.io/
-.. _`the installation documentation`: https://cryptography.io/en/latest/installation/
-.. _`issue tracker`: https://github.com/pyca/cryptography/issues
-.. _`cryptography-dev`: https://mail.python.org/mailman/listinfo/cryptography-dev
-
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n cryptography-%{unmangled_version} -n cryptography-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-env CFLAGS="$RPM_OPT_FLAGS" python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
