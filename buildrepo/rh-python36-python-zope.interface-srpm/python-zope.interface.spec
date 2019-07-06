@@ -14,8 +14,10 @@ Vendor:         Zope Foundation and Contributors <zope-dev@zope.org>
 
 Source0:        https://pypi.io/packages/source/z/%{py_pkgname}/%{py_pkgname}-%{version}.tar.gz
 BuildRequires:  %{?scl_prefix}python-devel
+# Manually added for renaming pytion-zope-interface to python-zope.interface
 Provides:	%{?scl_prefix}python-zope-interface = %{version}-%{release}
 Obsoletes:	%{?scl_prefix}python-zope-interface < %{version}-%{release}
+Conflicts:	%{?scl_prefix}python-zope-interface < %{version}-%{release}
 
 %description
 Interfaces are a mechanism for labeling objects as conforming to a given API \
@@ -47,3 +49,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f INSTALLED_FILES
 %defattr(-,root,root)
+
+%changelog
+* Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 4.4.3-0
+- Update .spec file with py2pack
+- Rename from python-zope-internface to python-zope.internface
+- Add Provides, Conflicts, and Obsoletes for consistency
