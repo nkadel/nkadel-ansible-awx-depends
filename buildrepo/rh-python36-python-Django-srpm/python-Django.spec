@@ -1,92 +1,94 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-Django
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name Django
-%define version 1.11.16
-%define unmangled_version 1.11.16
-%define unmangled_version 1.11.16
-%define release 1
+%global pypi_name Django
 
-Summary: A high-level Python Web framework that encourages rapid development and clean, pragmatic design.
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}Django
-Version: %{version}
-Release: %{release}
-Source0: Django-%{unmangled_version}.tar.gz
-License: BSD
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/Django-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Django Software Foundation <foundation@djangoproject.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://www.djangoproject.com/
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        1.11.16
+Release:        0%{?dist}
+Url:            https://www.djangoproject.com/
+Summary:        A high-level Python Web framework that encourages rapid development and clean, pragmatic design.
+License:        BSD (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-argon2-cffi >= 16.1.0
+Requires:       %{?scl_prefix}python-bcrypt
+Requires:       %{?scl_prefix}python-docutils
+Requires:       %{?scl_prefix}python-geoip2
+Requires:       %{?scl_prefix}python-jinja2 >= 2.9.2
+Requires:       %{?scl_prefix}python-numpy
+Requires:       %{?scl_prefix}python-Pillow
+Requires:       %{?scl_prefix}python-PyYAML
+# pylibmc/libmemcached can't be built on Windows.
+Requires:       %{?scl_prefix}python-pylibmc
+Requires:       %{?scl_prefix}python-python-memcached >= 1.59
+Requires:       %{?scl_prefix}python-pytz
+Requires:       %{?scl_prefix}python-selenium
+Requires:       %{?scl_prefix}python-sqlparse
+Requires:       %{?scl_prefix}python-tblib
+# For python2
+#Requires:       %{?scl_prefix}python-enum34
+#Requires:       %{?scl_prefix}python-mock
+%if %{with_dnf}
+# Manually added from oracle.txt
+#Suggests:       %{?scl_prefix}python-cx_oracle  < 7
+# Manually added from postgres.txt
+Suggests:         %{?scl_prefix}python-psycopg2-binary >= 2.5.4
+# Manually added from mysql.txt
+Suggests:         %{?scl_prefix}python-mysqlclient >= 1.3.7
+# Manually added for argon2
+Suggests:         %{?scl_prefix}python-argon2-cffi >= 16.1.0
+# Manually added for bcrypt
+Suggests:         %{?scl_prefix}python-bcrypt
+%endif # with_dnf
 
 %description
-UNKNOWN
 
 
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n Django-%{unmangled_version} -n Django-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-#! /bin/sh
-#
-# This file becomes the install section of the generated spec file.
-#
-
-# This is what dist.py normally does.
-%{__python} setup.py install --single-version-externally-managed --root=${RPM_BUILD_ROOT} --record="INSTALLED_FILES"
-
-# Sort the filelist so that directories appear before files. This avoids
-# duplicate filename problems on some systems.
-touch DIRS
-for i in `cat INSTALLED_FILES`; do
-  if [ -f ${RPM_BUILD_ROOT}/$i ]; then
-    echo $i >>FILES
-  fi
-  if [ -d ${RPM_BUILD_ROOT}/$i ]; then
-    echo %dir $i >>DIRS
-  fi
-done
-
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
-# Make sure we match foo.pyo and foo.pyc along with foo.py (but only once each)
-sed -e "/\.py[co]$/d" -e "s/\.py$/.py*/" DIRS FILES >INSTALLED_FILES
-
-mkdir -p ${RPM_BUILD_ROOT}/%{_mandir}/man1/
-cp docs/man/* ${RPM_BUILD_ROOT}/%{_mandir}/man1/
-cat << EOF >> INSTALLED_FILES
-%doc %{_mandir}/man1/*"
-EOF
-
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
+%{_bindir}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
-/opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/django
-%doc docs extras AUTHORS INSTALL LICENSE README.rst
+%changelog
+* Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.11.16-0
+- Update .spec file with py2pack
+- Manually add Requires
+- Manually add _bindir/*
+
