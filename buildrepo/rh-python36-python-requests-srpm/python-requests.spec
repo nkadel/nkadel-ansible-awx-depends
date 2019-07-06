@@ -1,168 +1,93 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-requests
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name requests
-%define version 2.20.0
-%define unmangled_version 2.20.0
-%define unmangled_version 2.20.0
-%define release 1
+%global pypi_name requests
 
-Summary: Python HTTP for Humans.
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}requests
-Version: %{version}
-Release: %{release}
-Source0: requests-%{unmangled_version}.tar.gz
-License: Apache 2.0
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/requests-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Kenneth Reitz <me@kennethreitz.org>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: http://python-requests.org
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        2.20.0
+Release:        0%{?dist}
+Url:            http://python-requests.org
+Summary:        Python HTTP for Humans.
+License:        Apache-2.0
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-certifi >= 2017.4.17
+Requires:       %{?scl_prefix}python-chardet < 3.1.0
+Requires:       %{?scl_prefix}python-chardet >= 3.0.2
+Requires:       %{?scl_prefix}python-idna < 2.8
+Requires:       %{?scl_prefix}python-idna >= 2.5
+Requires:       %{?scl_prefix}python-urllib3 < 1.25
+Requires:       %{?scl_prefix}python-urllib3 >= 1.21.1
+
+%if %{with_dnf}
+# Manualy added for security
+Suggests:       %{?scl_prefix}python-pyOpenSSL >= 0.14
+Suggests:       %{?scl_prefix}python-cryptography >= 1.3.4
+Suggests:       %{?scl_prefix}python-idna >= 2.0.0
+# Manualy added for socks
+Conflicts:      %{?scl_prefix}python-PySocks = 1.5.7
+Suggests:       %{?scl_prefix}python-PySocks >= 1.5.6
+# Only or Windoes
+#Suggests:       %{?scl_prefix}python-win_inet_pton
+%endif # with_dnf
 
 %description
-Requests: HTTP for Humans™
+Requests: HTTP for Humans&#8482;
 ==========================
-
-[![image](https://img.shields.io/pypi/v/requests.svg)](https://pypi.org/project/requests/)
-[![image](https://img.shields.io/pypi/l/requests.svg)](https://pypi.org/project/requests/)
-[![image](https://img.shields.io/pypi/pyversions/requests.svg)](https://pypi.org/project/requests/)
-[![codecov.io](https://codecov.io/github/requests/requests/coverage.svg?branch=master)](https://codecov.io/github/requests/requests)
-[![image](https://img.shields.io/github/contributors/requests/requests.svg)](https://github.com/requests/requests/graphs/contributors)
-[![image](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/kennethreitz)
-
-**If you're interested in financially supporting Kenneth Reitz open source, consider [visiting this link](https://cash.me/$KennethReitz). Your support helps tremendously with sustainability of motivation, as Open Source is no longer part of my day job.**
 
 Requests is the only *Non-GMO* HTTP library for Python, safe for human
 consumption.
 
 ![image](https://farm5.staticflickr.com/4317/35198386374_1939af3de6_k_d.jpg)
 
-Behold, the power of Requests:
-
-``` {.sourceCode .python}
->>> r = requests.get('https://api.github.com/user', auth=('user', 'pass'))
->>> r.status_code
-200
->>> r.headers['content-type']
-'application/json; charset=utf8'
->>> r.encoding
-'utf-8'
->>> r.text
-u'{"type":"User"...'
->>> r.json()
-{u'disk_usage': 368627, u'private_gists': 484, ...}
-```
-
-See [the similar code, sans Requests](https://gist.github.com/973705).
-
-[![image](https://raw.githubusercontent.com/requests/requests/master/docs/_static/requests-logo-small.png)](http://docs.python-requests.org/)
-
 Requests allows you to send *organic, grass-fed* HTTP/1.1 requests,
-without the need for manual labor. There's no need to manually add query
+without the need for manual labor. There is no need to manually add query
 strings to your URLs, or to form-encode your POST data. Keep-alive and
 HTTP connection pooling are 100% automatic, thanks to
 [urllib3](https://github.com/shazow/urllib3).
 
-Besides, all the cool kids are doing it. Requests is one of the most
-downloaded Python packages of all time, pulling in over 11,000,000
-downloads every month. You don't want to be left out!
-
-Feature Support
----------------
-
-Requests is ready for today's web.
-
--   International Domains and URLs
--   Keep-Alive & Connection Pooling
--   Sessions with Cookie Persistence
--   Browser-style SSL Verification
--   Basic/Digest Authentication
--   Elegant Key/Value Cookies
--   Automatic Decompression
--   Automatic Content Decoding
--   Unicode Response Bodies
--   Multipart File Uploads
--   HTTP(S) Proxy Support
--   Connection Timeouts
--   Streaming Downloads
--   `.netrc` Support
--   Chunked Requests
-
-Requests officially supports Python 2.7 & 3.4–3.7, and runs great on
-PyPy.
-
-Installation
-------------
-
-To install Requests, simply use [pipenv](http://pipenv.org/) (or pip, of
-course):
-
-``` {.sourceCode .bash}
-$ pipenv install requests
-✨🍰✨
-```
-
-Satisfaction guaranteed.
-
-Documentation
--------------
-
-Fantastic documentation is available at
-<http://docs.python-requests.org/>, for a limited time only.
-
-How to Contribute
------------------
-
-1.  Check for open issues or open a fresh issue to start a discussion
-    around a feature idea or a bug. There is a [Contributor
-    Friendly](https://github.com/requests/requests/issues?direction=desc&labels=Contributor+Friendly&page=1&sort=updated&state=open)
-    tag for issues that should be ideal for people who are not very
-    familiar with the codebase yet.
-2.  Fork [the repository](https://github.com/requests/requests) on
-    GitHub to start making your changes to the **master** branch (or
-    branch off of it).
-3.  Write a test which shows that the bug was fixed or that the feature
-    works as expected.
-4.  Send a pull request and bug the maintainer until it gets merged and
-    published. :) Make sure to add yourself to
-    [AUTHORS](https://github.com/requests/requests/blob/master/AUTHORS.rst).
-
-
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n requests-%{unmangled_version} -n requests-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com>
+- Update .spec file with py2pack
+- Manually set Requires and Suggests
+- Manually reduce description
