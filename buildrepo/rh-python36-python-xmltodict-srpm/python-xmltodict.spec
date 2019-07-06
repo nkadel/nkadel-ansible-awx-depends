@@ -4,8 +4,10 @@
 # Copyright (c) 2019 Nico Kadel-Garcia.
 #
 
-%{?scl:%scl_package python-six}
-%{!?scl:%global pkg_name %{name}}
+%global pypi_name xmltodict
+
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
 # Older RHEL does not use dnf, does not support "Suggests"
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -14,15 +16,30 @@
 %global with_dnf 0
 %endif
 
-%global pypi_name xmltodict
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        0.11.0
+Release:        0%{?dist}
+Url:            https://github.com/martinblech/xmltodict
+Summary:        Makes working with XML feel like you are working with JSON
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
 
-# Descriptions can get long and clutter .spec file
-%global common_description %{expand:
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+%if %{with_dnf}
+%endif # with_dnf
+%{?python_provide:%python_provide python-%{pypi_name}}
+
+%description
 # xmltodict
 
 `xmltodict` is a Python module that makes working with XML feel like you are working with [JSON](http://docs.python.org/library/json.html), as in this ["spec"](http://www.xml.com/pub/a/2006/05/31/converting-between-xml-and-json.html):
 
-[![Build Status](https://secure.travis-ci.org/martinblech/xmltodict.png)](http://travis-ci.org/martinblech/xmltodict)
+[![Build Status](https://secure.travis-ci.org/martinblech/xmltodict.svg)](http://travis-ci.org/martinblech/xmltodict)
 
 ```python
 >>> print(json.dumps(xmltodict.parse("""
@@ -122,7 +139,7 @@ while True:
 ```
 
 ```sh
-$ cat enwiki-pages-articles.xml.bz2 | bunzip2 | xmltodict.py 2 | myscript.py
+$ bunzip2 enwiki-pages-articles.xml.bz2 | xmltodict.py 2 | myscript.py
 AccessibleComputing
 Anarchism
 AfghanistanHistory
@@ -136,14 +153,14 @@ Autism
 Or just cache the dicts so you don't have to parse that big XML file again. You do this only once:
 
 ```sh
-$ cat enwiki-pages-articles.xml.bz2 | bunzip2 | xmltodict.py 2 | gzip > enwiki.dicts.gz
+$ bunzip2 enwiki-pages-articles.xml.bz2 | xmltodict.py 2 | gzip > enwiki.dicts.gz
 ```
 
 And you reuse the dicts with every script that needs them:
 
 ```sh
-$ cat enwiki.dicts.gz | gunzip | script1.py
-$ cat enwiki.dicts.gz | gunzip | script2.py
+$ gunzip enwiki.dicts.gz | script1.py
+$ gunzip enwiki.dicts.gz | script2.py
 ...
 ```
 
@@ -195,7 +212,7 @@ $ pip install xmltodict
 
 ### RPM-based distro (Fedora, RHEL, &#8230;)
 
-There is an [official Fedora package for xmltodict](https://admin.fedoraproject.org/pkgdb/acls/name/python-xmltodict).
+There is an [official Fedora package for xmltodict](https://apps.fedoraproject.org/packages/python-xmltodict).
 
 ```sh
 $ sudo yum install python-xmltodict
@@ -217,27 +234,14 @@ There is an [official Debian package for xmltodict](https://tracker.debian.org/p
 $ sudo apt install python-xmltodict
 ```
 
-}
+### FreeBSD
 
-# Common SRPM package
-Name:           %{?scl_prefix}python-%{pypi_name}
-Version:        0.11.0
-Release:        0%{?dist}
-Url:            https://github.com/martinblech/xmltodict
-Summary:        Makes working with XML feel like you are working with JSON
-License:        MIT
-Group:          Development/Languages/Python
-# Stop using py2pack macros, use local macros published by Fedora
-Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
-BuildArch:      noarch
-BuildRequires:  %{?scl_prefix}python-devel
-BuildRequires:  %{?scl_prefix}python-setuptools
-%if %{with_dnf}
-%endif # with_dnf
-%{?python_provide:%python_provide python-%{pypi_name}}
+There is an [official FreeBSD port for xmltodict](https://svnweb.freebsd.org/ports/head/devel/py-xmltodict/).
 
-%description
-%blobal common_description
+```sh
+$ pkg install py36-xmltodict
+```
+
 
 %prep
 %setup -q -n %{pypi_name}-%{version}
