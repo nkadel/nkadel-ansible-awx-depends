@@ -1,29 +1,50 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-pytest-runner
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name pytest-runner
-%define version 4.2
-%define unmangled_version 4.2
-%define unmangled_version 4.2
-%define release 1
+%global pypi_name pytest-runner
 
-Summary: Invoke py.test as distutils command with dependency resolution
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}pytest-runner
-Version: %{version}
-Release: %{release}
-Source0: pytest-runner-%{unmangled_version}.tar.gz
-License: UNKNOWN
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/pytest-runner-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Jason R. Coombs <jaraco@jaraco.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/pytest-dev/pytest-runner
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        4.2
+Release:        0%{?dist}
+Url:            https://github.com/pytest-dev/pytest-runner
+Summary:        Invoke py.test as distutils command with dependency resolution
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+BuildRequires:  %{?scl_prefix}python-setuptools_scm >= 1.15.0
+%if %{with_dnf}
+# Manually added for docs
+Suggests:  %{?scl_prefix}python-jaraco.packaging >= 3.2
+Suggests:  %{?scl_prefix}python-rst.linker >= 1.9
+Suggests:  %{?scl_prefix}python-sphinx
+# Manually added for testing
+[testing]
+Suggests:  %{?scl_prefix}python-collective.checkdocs
+Suggests:  %{?scl_prefix}python-pytest >= 2.8
+Suggests:  %{?scl_prefix}python-pytest-flake8
+Suggests:  %{?scl_prefix}python-pytest-sugar >= 0.9.1
+Suggests:  %{?scl_prefix}python-pytest-virtualenv
+%endif # with_dnf
 
 %description
 .. image:: https://img.shields.io/pypi/v/pytest-runner.svg
@@ -143,33 +164,28 @@ is invoked::
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n pytest-runner-%{unmangled_version} -n pytest-runner-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 4.2-0
+- Update .spec file with py2pack
+- Manually add Suggests for docs and testing
