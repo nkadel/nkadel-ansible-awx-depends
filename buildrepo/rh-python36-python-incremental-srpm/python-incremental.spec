@@ -30,12 +30,11 @@ BuildArch:      noarch
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
-# Manually addded
-BuildRequires:  %{?scl_prefix}python-click >= 6.0
-BuildRequires:  %{?scl_prefix}python-twisted >= 16.4.0
 %if %{with_dnf}
+# Manually addded for scripts
+Suggests:       %{?scl_prefix}python-click >= 6.0
+Suggests:       %{?scl_prefix}python-twisted >= 16.4.0
 %endif # with_dnf
-%{?python_provide:%python_provide python-%{pypi_name}}
 
 %description
 Incremental
