@@ -1,1 +1,1 @@
-../Makefile.sclpy36
+../Makefile.depends
