@@ -29,11 +29,16 @@ Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name};
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
-# Added manuall
-BuildRequires:  %{?scl_prefix}python-incremental >= 16.10.1
+# Manually added
+#BuildRequires:  %{?scl_prefix}python-incremental >= 16.10.1
+BuildRequires:  %{?scl_prefix}python-incremental
+# Manually added
+Provides:       %{?scl_prefix}python-twisted = %{version}-%{release}
+Obsoletes:      %{?scl_prefix}python-twisted < %{version}-%{release}
+Conflicts:      %{?scl_prefix}python-twisted < %{version}-%{release}
 %if %{with_dnf}
 %endif # with_dnf
-%{?python_provide:%python_provide python-%{pypi_name}}
+# Manually added for other package
 
 %description
 An extensible framework for Python programming, with special focus
