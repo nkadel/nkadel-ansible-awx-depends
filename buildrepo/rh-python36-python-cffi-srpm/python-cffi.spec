@@ -26,6 +26,8 @@ License:        MIT
 Group:          Development/Languages/Python
 # Stop using py2pack macros, use local macros published by Fedora
 Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+# Manually add epoch to force use of local version
+Epoch: 3
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
@@ -42,12 +44,6 @@ CFFI
 
 Foreign Function Interface for Python calling C code.
 Please see the `Documentation <http://cffi.readthedocs.org/>`_.
-
-Contact
--------
-
-`Mailing list <https://groups.google.com/forum/#!forum/python-cffi>`_
-
 
 %prep
 %setup -q -n %{pypi_name}-%{version}
@@ -73,4 +69,5 @@ rm -rf %{buildroot}
 * Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.11.5-0
 - Update .spec with py2pack
 - Add Requires for libffi-devel
+- Add Epoch to displace upstream cffi
 
