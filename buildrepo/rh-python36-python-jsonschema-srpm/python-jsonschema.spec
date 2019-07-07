@@ -30,6 +30,8 @@ BuildArch:      noarch
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+BuildRequires:  %{?scl_prefix}python-vcversioner >= 2.16.0.0
 # Manually added for python == 2.7
 #Requires:       %{?scl_prefix}python-functools32
 %if %{with_dnf}
