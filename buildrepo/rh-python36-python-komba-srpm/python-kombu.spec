@@ -1,30 +1,68 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-kombu
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name kombu
-%define version 4.2.1
-%define unmangled_version 4.2.1
-%define unmangled_version 4.2.1
-%define release 1
+%global pypi_name kombu
 
-Summary: Messaging library for Python.
-Name: %{?scl_prefix}%{pkg_name}
-Version: %{version}
-Release: %{release}
-Source0: kombu-%{unmangled_version}.tar.gz
-License: BSD
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{pkg_name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Ask Solem <ask@celeryproject.org>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Requires: %{?scl_prefix}amqp >= 2.
-Url: https://kombu.readthedocs.io
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        4.2.1
+Release:        0%{?dist}
+Url:            https://kombu.readthedocs.io
+Summary:        Messaging library for Python.
+License:        BSD (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-amqp < 3.0
+Requires:       %{?scl_prefix}python-amqp >= 2.1.4
+
+%if %{with_dnf}
+# Manually added for consul
+Suggests:       %{?scl_prefix}python-python-consul >= 0.6.0
+# Manually added for librabbitmq
+Suggests:       %{?scl_prefix}python-librabbitmq >= 1.5.2
+# Manually added for mongodb
+Suggests:       %{?scl_prefix}python-pymongo < 3.0
+Suggests:       %{?scl_prefix}python-pymongo >= 2.6.2
+# Manually added for msgpack
+Suggests:       %{?scl_prefix}python-msgpack
+# Manually added for pyro
+Suggests:       %{?scl_prefix}python-pyro4
+# Manually added for qpid
+Suggests:       %{?scl_prefix}python-qpid-python >= 0.26
+Suggests:       %{?scl_prefix}python-qpid-tools >= 0.26
+# Manually added for redis
+Suggests:       %{?scl_prefix}python-redis >= 2.10.5
+# Manually added for slmq
+Suggests:       %{?scl_prefix}python-softlayer_messaging >= 1.0.3
+# Manually added for sqlalchemy
+Suggests:       %{?scl_prefix}python-sqlalchemy
+# Manually added for sqs
+Suggests:       %{?scl_prefix}python-boto3 >= 1.4.4
+Suggests:       %{?scl_prefix}python-pycurl
+# Manually added for yaml
+Suggests:       %{?scl_prefix}python-PyYAML >= 3.10
+# Manually added for zookeeper
+Suggests:       %{?scl_prefix}python-kazoo >= 1.3.1
+%endif # with_dnf
 
 %description
 ========================================
@@ -327,7 +365,7 @@ by doing the following,:
 ::
 
     $ python setup.py build
-    # python setup.py install --single-version-externally-managed # as root
+    # python setup.py install # as root
 
 
 
@@ -389,33 +427,25 @@ file in the top distribution directory for the full license text.
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n kombu-%{unmangled_version} -n kombu-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
