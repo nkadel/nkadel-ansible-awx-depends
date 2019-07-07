@@ -31,6 +31,7 @@ BuildArch:      noarch
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
+BuildRequires:  %{?scl_prefix}python-setuptools_scm >= 1.15.0
 Requires:       %{?scl_prefix}python-jaraco.functools
 Requires:       %{?scl_prefix}python-jaraco.collections
 %if %{with_dnf}
@@ -84,3 +85,7 @@ rm -rf %{buildroot}
 %{python3_sitelib}/*
 
 %changelog
+* Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.10-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+
