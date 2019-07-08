@@ -1,91 +1,41 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-chardet
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name chardet
-%define version 3.0.4
-%define unmangled_version 3.0.4
-%define unmangled_version 3.0.4
-%define release 1
+%global pypi_name chardet
 
-Summary: Universal encoding detector for Python 2 and 3
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}chardet
-Version: %{version}
-Release: %{release}
-Source0: chardet-%{unmangled_version}.tar.gz
-License: LGPL
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/chardet-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Daniel Blanchard <dan.blanchard@gmail.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/chardet/chardet
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        3.0.4
+Release:        0%{?dist}
+Url:            https://github.com/chardet/chardet
+Summary:        Universal encoding detector for Python 2 and 3
+License:        LGPL (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 Chardet: The Universal Character Encoding Detector
 --------------------------------------------------
-
-.. image:: https://img.shields.io/travis/chardet/chardet/stable.svg
-   :alt: Build status
-   :target: https://travis-ci.org/chardet/chardet
-
-.. image:: https://img.shields.io/coveralls/chardet/chardet/stable.svg
-   :target: https://coveralls.io/r/chardet/chardet
-
-.. image:: https://img.shields.io/pypi/v/chardet.svg
-   :target: https://warehouse.python.org/project/chardet/
-   :alt: Latest version on PyPI
-
-.. image:: https://img.shields.io/pypi/l/chardet.svg
-   :alt: License
-
-
-Detects
- - ASCII, UTF-8, UTF-16 (2 variants), UTF-32 (4 variants)
- - Big5, GB2312, EUC-TW, HZ-GB-2312, ISO-2022-CN (Traditional and Simplified Chinese)
- - EUC-JP, SHIFT_JIS, CP932, ISO-2022-JP (Japanese)
- - EUC-KR, ISO-2022-KR (Korean)
- - KOI8-R, MacCyrillic, IBM855, IBM866, ISO-8859-5, windows-1251 (Cyrillic)
- - ISO-8859-5, windows-1251 (Bulgarian)
- - ISO-8859-1, windows-1252 (Western European languages)
- - ISO-8859-7, windows-1253 (Greek)
- - ISO-8859-8, windows-1255 (Visual and Logical Hebrew)
- - TIS-620 (Thai)
-
-.. note::
-   Our ISO-8859-2 and windows-1250 (Hungarian) probers have been temporarily
-   disabled until we can retrain the models.
-
-Requires Python 2.6, 2.7, or 3.3+.
-
-Installation
-------------
-
-Install from `PyPI <https://pypi.python.org/pypi/chardet>`_::
-
-    pip install chardet
-
-Documentation
--------------
-
-For users, docs are now available at https://chardet.readthedocs.io/.
-
-Command-line Tool
------------------
-
-chardet comes with a command-line script which reports on the encodings of one
-or more files::
-
-    % chardetect somefile someotherfile
-    somefile: windows-1252 with confidence 0.5
-    someotherfile: ascii with confidence 1.0
-
-About
------
 
 This is a continuation of Mark Pilgrim's excellent chardet. Previously, two
 versions needed to be maintained: one that supported python 2.x and one that
@@ -95,35 +45,24 @@ coherent version that works for Python 2.6+.
 
 :maintainer: Dan Blanchard
 
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n chardet-%{unmangled_version} -n chardet-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
