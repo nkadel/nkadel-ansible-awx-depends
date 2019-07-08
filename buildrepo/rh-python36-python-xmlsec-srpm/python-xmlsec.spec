@@ -35,7 +35,6 @@ BuildRequires:  libtool-ltdl-devel
 BuildRequires:  %{?scl_prefix}python-lxml >= 3.0
 %if %{with_dnf}
 %endif # with_dnf
-%{?python_provide:%python_provide python-xmlsec}
 
 %description
 
