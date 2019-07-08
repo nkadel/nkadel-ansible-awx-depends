@@ -95,4 +95,4 @@ rm -rf %{buildroot}
 %changelog
 * Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.5.3-0
 - Update .spec file with py2pack
-- Manuall add Requires and Suggests
+- Manually add Requires and Suggests
