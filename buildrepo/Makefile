@@ -38,19 +38,27 @@ build getsrc:: FORCE
 	     (cd $$name && $(MAKE) $(MFLAGS) $@); \
 	done
 
-# Git submodule checkout operation
-# For more recent versions of git, use "git checkout --recurse-submodules"
-*-srpm::
-	@[ -d $@/.git ] || \
-	     git submodule update --init $@
-
 # Dependencies of libraries on other libraries for compilation
 
 # python-lxml requires Cython
-rh-python36-python-lxml-srpm:: #rh-python36-Cython-srpm
+#rh-python36-python-lxml-srpm:: rh-python36-Cython-srpm
+#rh-python36-python-cryptography-srpm:: rh-python36-python-cffi-srpm
+#rh-python36-python-cryptography-srpm:: rh-python36-python-pycparser-srpm
+
+#rh-python36-python-Twisted-srpm:: rh-python36-python-incremental-srpm
+
+# setuptools_scm is not explicitly in "requires" lists because even to read
+# the lists, you need this installed first
+#rh-python36-python-ktyring-srpm:: rh-python36-python-setuptools_scm-srpm
+#rh-python36-python-jaraco.txt-srpm:: rh-python36-python-setuptools_scm-srpm
+
+#rh-python36-python-jsonschema-srpm:: rh-python36-python-vcversioner-srpm
+
+#rh-python36-python-django-taggit-srpm:: rh-python36-python-isort-srpm
 
 # Lots and lots of dependencies, consider using built-in release
-#rh-python36-python-ansible-srpm::
+#rh-python36-python-ansible-srpm:: rh-python36-python-cryptography-srpm
+
 
 # Actually build in directories
 $(SAMBAPKGS):: FORCE
