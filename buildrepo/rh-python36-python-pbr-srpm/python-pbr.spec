@@ -30,15 +30,8 @@ BuildArch:      noarch
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
-# Manually added
-#Requires:       %{?scl_prefix}python-sphinx >= 1.6.2
-#Conflicts:      %{?scl_prefix}python-sphinx = 1.6.6
-#Conflicts:      %{?scl_prefix}python-sphinx = 1.6.7
-Requires:       %{?scl_prefix}python-openstackdocstheme >= 1.18.1
-Requires:       %{?scl_prefix}python-reno >= 2.5.0
-
 %if %{with_dnf}
-# Manually added for test
+# Manually added for docs
 Suggests:       %{?scl_prefix}python-sphinx >= 1.6.2
 Conflicts:      %{?scl_prefix}python-sphinx = 1.6.6
 Conflicts:      %{?scl_prefix}python-sphinx = 1.6.7
