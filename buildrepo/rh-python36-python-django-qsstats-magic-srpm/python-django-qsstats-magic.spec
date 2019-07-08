@@ -1,28 +1,38 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-django-qsstats-magic
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name django-qsstats-magic
-%define version 0.7.2
-%define unmangled_version 0.7.2
-%define release 1
+%global pypi_name django-qsstats-magic
 
-Summary: A django microframework that eases the generation of aggregate data for querysets.
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}django-qsstats-magic
-Version: %{version}
-Release: %{release}
-Source0: django-qsstats-magic-%{unmangled_version}.tar.gz
-License: UNKNOWN
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/django-qsstats-magic-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Matt Croydon, Mikhail Korobov <mcroydon@gmail.com, kmike84@gmail.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: http://bitbucket.org/kmike/django-qsstats-magic/
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        0.7.2
+Release:        0%{?dist}
+Url:            http://bitbucket.org/kmike/django-qsstats-magic/
+Summary:        A django microframework that eases the generation of aggregate data for querysets.
+License:        UNKNOWN (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+Requires:       %{?scl_prefix}python-dateutil>=1.4.1, < 2.0
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 ====================================================
@@ -275,35 +285,24 @@ I don't know if original author (Matt Croydon) would like my changes so
 I renamed a project for now. If the changes will be merged then
 django-qsstats-magic will become obsolete.
 
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n django-qsstats-magic
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
