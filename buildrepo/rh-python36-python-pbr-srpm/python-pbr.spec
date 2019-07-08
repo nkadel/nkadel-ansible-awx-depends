@@ -31,13 +31,20 @@ BuildArch:      noarch
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
-Requires:       %{?scl_prefix}python-sphinx >= 1.6.2
-Conflicts:      %{?scl_prefix}python-sphinx = 1.6.6
-Conflicts:      %{?scl_prefix}python-sphinx = 1.6.7
+#Requires:       %{?scl_prefix}python-sphinx >= 1.6.2
+#Conflicts:      %{?scl_prefix}python-sphinx = 1.6.6
+#Conflicts:      %{?scl_prefix}python-sphinx = 1.6.7
 Requires:       %{?scl_prefix}python-openstackdocstheme >= 1.18.1
 Requires:       %{?scl_prefix}python-reno >= 2.5.0
 
 %if %{with_dnf}
+# Manually added for test
+Suggests:       %{?scl_prefix}python-sphinx >= 1.6.2
+Conflicts:      %{?scl_prefix}python-sphinx = 1.6.6
+Conflicts:      %{?scl_prefix}python-sphinx = 1.6.7
+Suggests:       %{?scl_prefix}python-openstackdocstheme >= 1.18.1
+Suggests:       %{?scl_prefix}python-reno >= 2.5.0
+
 # The order of packages is significant, because pip processes them in the order
 # of appearance. Changing the order has an impact on the overall integration
 # process, which may cause wedges in the gate later.
