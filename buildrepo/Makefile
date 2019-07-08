@@ -53,6 +53,7 @@ build getsrc:: FORCE
 # the lists, you need this installed first
 #rh-python36-python-ktyring-srpm:: rh-python36-python-setuptools_scm-srpm
 #rh-python36-python-jaraco.txt-srpm:: rh-python36-python-setuptools_scm-srpm
+#rh-python36-python-pytest-runner-srpm:: rh-python36-python-setuptools_scm-srpm
 
 #rh-python36-python-jsonschema-srpm:: rh-python36-python-vcversioner-srpm
 
