@@ -47,6 +47,11 @@ build getsrc:: FORCE
 
 #rh-python36-python-Twisted-srpm:: rh-python36-python-incremental-srpm
 
+#rh-python36-python-django-crum-srpm:: rh-python36-python-pytest-runner-srpm
+#rh-python36-python-django-split-settings-srpm:: rh-python36-python-pytest-runner-srpm
+#rh-python36-pythontacacs_plus-srpm:: rh-python36-python-pytest-runner-srpm
+#rh-python36-pyton-apache-libcloud-srpm:: rh-python36-python-pytest-runner-srpm
+
 # setuptools_scm is not explicitly in "requires" lists because even to read
 # the lists, you need this installed first
 #rh-python36-python-ktyring-srpm:: rh-python36-python-setuptools_scm-srpm
