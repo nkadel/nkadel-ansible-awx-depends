@@ -64,5 +64,9 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
+%{_bindir}/*
 
 %changelog
+* Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 3.0.4-0
+- Update .spec from py2pack
+- Manually add _bindir
