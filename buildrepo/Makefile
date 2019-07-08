@@ -31,6 +31,8 @@ all install clean:: FORCE
 	     (cd $$name && $(MAKE) $(MFLAGS) $@); \
 	done  
 
+getsrc:: /usr/bin/spectool
+
 # Build and getsrc for locacl OS require scl-utils
 build getsrc:: /etc/rpm/macros.scl
 build getsrc:: FORCE
@@ -56,6 +58,7 @@ build getsrc:: FORCE
 # the lists, you need this installed first
 #rh-python36-python-ktyring-srpm:: rh-python36-python-setuptools_scm-srpm
 #rh-python36-python-jaraco.txt-srpm:: rh-python36-python-setuptools_scm-srpm
+#rh-python36-python-pytest-runner-srpm:: rh-python36-python-setuptools_scm-srpm
 
 #rh-python36-python-jsonschema-srpm:: rh-python36-python-vcversioner-srpm
 
@@ -74,7 +77,8 @@ $(REPOS):
 	install -d -m 755 $@
 
 .PHONY: $(REPODIRS)
-$(REPODIRS): $(REPOS)
+$(REPODIRS):: /usr/bin/createrepo
+$(REPODIRS):: $(REPOS)
 	@install -d -m 755 `dirname $@`
 	/usr/bin/createrepo -q `dirname $@`
 
