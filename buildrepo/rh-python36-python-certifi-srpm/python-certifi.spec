@@ -1,29 +1,37 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-certifi
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name certifi
-%define version 2018.1.18
-%define unmangled_version 2018.1.18
-%define unmangled_version 2018.1.18
-%define release 1
+%global pypi_name certifi
 
-Summary: Python package for providing Mozilla's CA Bundle.
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}certifi
-Version: %{version}
-Release: %{release}
-Source0: certifi-%{unmangled_version}.tar.gz
-License: MPL-2.0
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/certifi-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Kenneth Reitz <me@kennethreitz.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: http://certifi.io/
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        2018.1.18
+Release:        0%{?dist}
+Url:            http://certifi.io/
+Summary:        Python package for providing Mozilla CA Bundle.
+License:        MPL-2.0 (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 Certifi: Python SSL Certificates
@@ -75,33 +83,25 @@ instead. ``certifi.old_where()`` will be removed in 2018.
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n certifi-%{unmangled_version} -n certifi-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
