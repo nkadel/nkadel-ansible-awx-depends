@@ -31,11 +31,11 @@ BuildArch:      noarch
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
-Requires:  %{?scl_prefix}python-PyJWT>=1.4.0
-Requires:  %{?scl_prefix}python-oauthlib>=1.0.3
-Requires:  %{?scl_prefix}python-requests-oauthlib>=0.6.1
-Requires:  %{?scl_prefix}python-requests>=2.9.1
-Requires:  %{?scl_prefix}python-six>=1.10.0
+Requires:  %{?scl_prefix}python-PyJWT >= 1.4.0
+Requires:  %{?scl_prefix}python-oauthlib >= 1.0.3
+Requires:  %{?scl_prefix}python-requests-oauthlib >= 0.6.1
+Requires:  %{?scl_prefix}python-requests >= 2.9.1
+Requires:  %{?scl_prefix}python-six >= 1.10.0
 # Manually added for python3
 Requires:  %{?scl_prefix}defusedxml >= 0.5.0rc1
 Requires:  %{?scl_prefix}python3-openid >= 3.0.10
@@ -48,7 +48,6 @@ Suggests:       %{?scl_prefix}python-jose >= 3.0.0
 Suggests:       %{?scl_prefix}python-cryptography >= 2.1.1
 # For python2
 #Suggests:       %{?scl_prefix}python-python2-saml >= 1.2.1
-
 %endif # with_dnf
 
 %description
