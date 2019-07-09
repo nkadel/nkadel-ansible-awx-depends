@@ -31,9 +31,10 @@ BuildArch:      noarch
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
-Requires:  %{?scl_prefix}python-asgiref = 1.1
+#Requires:  %{?scl_prefix}python-asgiref = 1.1
+Requires:  %{?scl_prefix}python-asgiref
 Requires:  %{?scl_prefix}python-twisted >= 17.1
-Requires:  %{?scl_prefix}python-autobahn>=0.18
+Requires:  %{?scl_prefix}python-autobahn >= 0.18
 %if %{with_dnf}
 # Manually added for tests
 Suggests:  %{?scl_prefix}python-hypothesis
