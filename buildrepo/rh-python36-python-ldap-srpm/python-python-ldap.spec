@@ -31,8 +31,8 @@ BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
 BuildRequires:  openldap-devel
-Requires:       %{?scl_prefix}python-pyasn1>=0.3.7
-Requires:       %{?scl_prefix}python-pyasn1_modules>=0.1.5
+Requires:       %{?scl_prefix}python-pyasn1 >= 0.3.7
+Requires:       %{?scl_prefix}python-pyasn1_modules >= 0.1.5
 %if %{with_dnf}
 %endif # with_dnf
 
