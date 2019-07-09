@@ -32,8 +32,8 @@ BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 %if %{with_dnf}
 # [tests]
-Requires:       %{?scl_prefix}python-pytest = 4.3.0
-Requires:       %{?scl_prefix}python-pytest-asyncio = 0.10.0
+Suggests:       %{?scl_prefix}python-pytest = 4.3.0
+Suggests:       %{?scl_prefix}python-pytest-asyncio = 0.10.0
 %endif # with_dnf
 
 %description
