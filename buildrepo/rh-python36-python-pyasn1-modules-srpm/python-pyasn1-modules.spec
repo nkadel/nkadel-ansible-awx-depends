@@ -30,16 +30,17 @@ BuildArch:      noarch
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
-Requires:  %{?scl_prefix}python-pyasn1 >= 0.4.1
-Requires:  %{?scl_prefix}python-pyasn1 < 0.5.0
+Requires:       %{?scl_prefix}python-pyasn1 >= 0.4.1
+Requires:       %{?scl_prefix}python-pyasn1 < 0.5.0
 %if %{with_dnf}
 %endif # with_dnf
+# Manually added
+Provides:       %{?scl_prefix}python-pyasn1_modules = %{version}-%{release}
+Obsoletes:      %{?scl_prefix}python-pyasn1_modules <= %{version}-%{release}
+Conflicts:      %{?scl_prefix}python-pyasn1_modules <= %{version}-%{release}
 
 %description
 A collection of ASN.1 modules expressed in form of pyasn1 classes. Includes protocols PDUs definition (SNMP, LDAP etc.) and various data structures (X.509, PKCS etc.).
-
-
-
 
 %prep
 %setup -q -n %{pypi_name}-%{version}
@@ -65,4 +66,4 @@ rm -rf %{buildroot}
 * Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.2.1-0
 - Update .spec file with py2pack
 - Add Requires manually
-
+- Add Provides for python-pyasn1_modules because of mixed case pypi.org names
