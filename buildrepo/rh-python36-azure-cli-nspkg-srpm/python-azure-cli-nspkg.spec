@@ -1,30 +1,40 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
-%define _unpackaged_files_terminate_build 0
+#
+# spec file for package rh-python36-python-azure-cli-nspkg
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name azure-cli-nspkg
-%define version 3.0.2
-%define unmangled_version 3.0.2
-%define unmangled_version 3.0.2
-%define release 2
+%global pypi_name azure-cli-nspkg
 
-Summary: Microsoft Azure CLI Namespace Package
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}azure-cli-nspkg
-Version: %{version}
-Release: %{release}
-Source0: azure-cli-nspkg-%{unmangled_version}.tar.gz
-License: MIT
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/azure-cli-nspkg-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Microsoft Corporation <azpycli@microsoft.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/Azure/azure-cli
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        3.0.2
+Release:        0%{?dist}
+Url:            https://github.com/Azure/azure-cli
+Summary:        Microsoft Azure CLI Namespace Package
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-azure-nspkg >= 2.0.0
+
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 Microsoft Azure CLI Namespace Package
@@ -77,33 +87,25 @@ Release History
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n azure-cli-nspkg-%{unmangled_version} -n azure-cli-nspkg-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-cat INSTALLED_FILES |grep -v "/opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/azure/cli/__pycache__" |grep -v "/opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/azure/cli/__init__.py" > INSTALLED_FILES_WITHOUT_COMMON_PYCACHE
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES_WITHOUT_COMMON_PYCACHE
-%defattr(-,root,root)
+%changelog
