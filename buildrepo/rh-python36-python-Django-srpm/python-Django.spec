@@ -63,8 +63,8 @@ Suggests:         %{?scl_prefix}python-bcrypt
 %endif # with_dnf
 # Manually added for case switched packages
 Provides:         %{?scl_prefix}python-python-django = %{version}-%{release}
-Obsoletes:         %{?scl_prefix}python-python-django <= %{version}-%{release}
-Conflicts:         %{?scl_prefix}python-python-django <= %{version}-%{release}
+Obsoletes:        %{?scl_prefix}python-python-django <= %{version}-%{release}
+Conflicts:        %{?scl_prefix}python-python-django <= %{version}-%{release}
 
 %description
 Django is a high-level Python Web framework that encourages rapid development
