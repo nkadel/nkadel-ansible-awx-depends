@@ -61,9 +61,14 @@ Suggests:         %{?scl_prefix}python-argon2-cffi >= 16.1.0
 # Manually added for bcrypt
 Suggests:         %{?scl_prefix}python-bcrypt
 %endif # with_dnf
+# Manually added for case switched packages
+Provides:         %{?scl_prefix}python-python-django = %{version}-%{release}
+Obsoletes:         %{?scl_prefix}python-python-django <= %{version}-%{release}
+Conflicts:         %{?scl_prefix}python-python-django <= %{version}-%{release}
 
 %description
-
+Django is a high-level Python Web framework that encourages rapid development
+and clean, pragmatic design. Thanks for checking it out.
 
 %prep
 %setup -q -n %{pypi_name}-%{version}
@@ -91,4 +96,5 @@ rm -rf %{buildroot}
 - Update .spec file with py2pack
 - Manually add Requires
 - Manually add _bindir/*
+- Manually add Provides for mixed case python-django packages
 
