@@ -37,9 +37,9 @@ Requires:  %{?scl_prefix}python-requests-oauthlib >= 0.6.1
 Requires:  %{?scl_prefix}python-requests >= 2.9.1
 Requires:  %{?scl_prefix}python-six >= 1.10.0
 # Manually added for python3
-#Requires:  %{?scl_prefix}defusedxml >= 0.5.0rc1
+#Requires:  %{?scl_prefix}python-defusedxml >= 0.5.0rc1
 # Fix syntax for normal RHEL numbering, 0.5.0 is > 0.5.0rc1
-Requires:  %{?scl_prefix}defusedxml >= 0.5.0
+Requires:  %{?scl_prefix}python-defusedxml >= 0.5.0
 Requires:  %{?scl_prefix}python3-openid >= 3.0.10
 # For python2
 #Requires:  %{?scl_prefix}python2-openid >= 3.0.10
