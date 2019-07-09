@@ -31,6 +31,9 @@ BuildArch:      noarch
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
+BuildRequires:  openssl-devel
+BuildRequires:  %{?scl_prefix}python-cffi >= 1.7
+# Manually added
 Requires:       %{?scl_prefix}python-idna >= 2.1
 Requires:       %{?scl_prefix}python-asn1crypto >= 0.21.0
 Requires:       %{?scl_prefix}python-six >= 1.4.1
@@ -108,3 +111,6 @@ rm -rf %{buildroot}
 %{python3_sitelib}/*
 
 %changelog
+* Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 2.1.4-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
