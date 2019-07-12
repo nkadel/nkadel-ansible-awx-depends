@@ -1,0 +1,267 @@
+INFO buildroot.py:350:  Mock Version: 1.4.16
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/dev/pts
+DEBUG util.py:214:  creating dir: /var/lib/mock/sclpy36-7-x86_64/root/dev/pts
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/dev/shm
+DEBUG util.py:214:  creating dir: /var/lib/mock/sclpy36-7-x86_64/root/dev/shm
+DEBUG buildroot.py:481:  kernel version == 3.10.0-957.21.3.el7.x86_64
+DEBUG util.py:224:  touching file: /var/lib/mock/sclpy36-7-x86_64/root/etc/fstab
+DEBUG util.py:224:  touching file: /var/lib/mock/sclpy36-7-x86_64/root/etc/yum/yum.conf
+DEBUG util.py:224:  touching file: /var/lib/mock/sclpy36-7-x86_64/root/etc/dnf/dnf.conf
+DEBUG util.py:224:  touching file: /var/lib/mock/sclpy36-7-x86_64/root/var/log/yum.log
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/var/cache/yum/
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/mount', '-n', '--bind', '/var/cache/mock/sclpy36-7-x86_64/yum_cache/', '/var/lib/mock/sclpy36-7-x86_64/root/var/cache/yum/'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG buildroot.py:143:  rootdir = /var/lib/mock/sclpy36-7-x86_64/root
+DEBUG buildroot.py:144:  resultdir = /home/nkadel/git/nkadel-ansible-awx-depends/buildrepo/rh-python36-python-ply-srpm/sclpy36-7-x86_64
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/etc/pki/mock
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/etc/yum/pluginconf.d
+DEBUG package_manager.py:275:  configure yum
+DEBUG package_manager.py:287:  configure yum priorities
+DEBUG package_manager.py:289:  configure yum rhnplugin
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:676:  Using nspawn with args None
+DEBUG util.py:679:  Executing command: ['/usr/bin/systemd-nspawn', '-q', '-M', 'b5077ca546cc4552b5fa3f729d491afe', '-D', '/var/lib/mock/sclpy36-7-x86_64/root', '--setenv=TERM=vt100', '--setenv=SHELL=/bin/bash', '--setenv=HOME=/builddir', '--setenv=HOSTNAME=mock', '--setenv=PATH=/usr/bin:/bin:/usr/sbin:/sbin', '--setenv=PROMPT_COMMAND=printf "\\033]0;<mock-chroot>\\007"', '--setenv=PS1=<mock-chroot> \\s-\\v\\$ ', '--setenv=LANG=C', '/usr/sbin/userdel', '-r', '-f', 'mockbuild'] with env {'TERM': 'vt100', 'SHELL': '/bin/bash', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'PROMPT_COMMAND': 'printf "\\033]0;<mock-chroot>\\007"', 'PS1': '<mock-chroot> \\s-\\v\\$ ', 'LANG': 'C'} and shell False
+DEBUG util.py:420:  Unsharing. Flags: 134217728
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:676:  Using nspawn with args None
+DEBUG util.py:679:  Executing command: ['/usr/bin/systemd-nspawn', '-q', '-M', '1db01fb9aa9344e1ade19fdb162459c8', '-D', '/var/lib/mock/sclpy36-7-x86_64/root', '--setenv=TERM=vt100', '--setenv=SHELL=/bin/bash', '--setenv=HOME=/builddir', '--setenv=HOSTNAME=mock', '--setenv=PATH=/usr/bin:/bin:/usr/sbin:/sbin', '--setenv=PROMPT_COMMAND=printf "\\033]0;<mock-chroot>\\007"', '--setenv=PS1=<mock-chroot> \\s-\\v\\$ ', '--setenv=LANG=C', '/usr/sbin/groupdel', 'mock'] with env {'TERM': 'vt100', 'SHELL': '/bin/bash', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'PROMPT_COMMAND': 'printf "\\033]0;<mock-chroot>\\007"', 'PS1': '<mock-chroot> \\s-\\v\\$ ', 'LANG': 'C'} and shell False
+DEBUG util.py:420:  Unsharing. Flags: 134217728
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:676:  Using nspawn with args None
+DEBUG util.py:679:  Executing command: ['/usr/bin/systemd-nspawn', '-q', '-M', '27d4ba2978a24d1d98adb01c41cf1e1b', '-D', '/var/lib/mock/sclpy36-7-x86_64/root', '--setenv=TERM=vt100', '--setenv=SHELL=/bin/bash', '--setenv=HOME=/builddir', '--setenv=HOSTNAME=mock', '--setenv=PATH=/usr/bin:/bin:/usr/sbin:/sbin', '--setenv=PROMPT_COMMAND=printf "\\033]0;<mock-chroot>\\007"', '--setenv=PS1=<mock-chroot> \\s-\\v\\$ ', '--setenv=LANG=C', '/usr/sbin/groupadd', '-g', '135', 'mock'] with env {'TERM': 'vt100', 'SHELL': '/bin/bash', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'PROMPT_COMMAND': 'printf "\\033]0;<mock-chroot>\\007"', 'PS1': '<mock-chroot> \\s-\\v\\$ ', 'LANG': 'C'} and shell False
+DEBUG util.py:420:  Unsharing. Flags: 134217728
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:676:  Using nspawn with args None
+DEBUG util.py:679:  Executing command: ['/usr/bin/systemd-nspawn', '-q', '-M', 'f8c12d63b8c745b6b9573d5d44602e13', '-D', '/var/lib/mock/sclpy36-7-x86_64/root', '--setenv=TERM=vt100', '--setenv=SHELL=/bin/bash', '--setenv=HOME=/builddir', '--setenv=HOSTNAME=mock', '--setenv=PATH=/usr/bin:/bin:/usr/sbin:/sbin', '--setenv=PROMPT_COMMAND=printf "\\033]0;<mock-chroot>\\007"', '--setenv=PS1=<mock-chroot> \\s-\\v\\$ ', '--setenv=LANG=C', '/usr/sbin/useradd', '-o', '-m', '-u', '1000', '-g', '135', '-d', '/builddir', '-n', 'mockbuild'] with env {'TERM': 'vt100', 'SHELL': '/bin/bash', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'PROMPT_COMMAND': 'printf "\\033]0;<mock-chroot>\\007"', 'PS1': '<mock-chroot> \\s-\\v\\$ ', 'LANG': 'C'} and shell False
+DEBUG util.py:420:  Unsharing. Flags: 134217728
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/RPMS
+DEBUG util.py:214:  creating dir: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/RPMS
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/SPECS
+DEBUG util.py:214:  creating dir: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/SPECS
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/SRPMS
+DEBUG util.py:214:  creating dir: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/SRPMS
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/SOURCES
+DEBUG util.py:214:  creating dir: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/SOURCES
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/BUILD
+DEBUG util.py:214:  creating dir: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/BUILD
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/BUILDROOT
+DEBUG util.py:214:  creating dir: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/BUILDROOT
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/originals
+DEBUG util.py:214:  creating dir: /var/lib/mock/sclpy36-7-x86_64/root/builddir/build/originals
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/proc
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/mount', '-n', '-t', 'proc', 'proc', '/var/lib/mock/sclpy36-7-x86_64/root/proc'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/sys
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/mount', '-n', '-t', 'sysfs', 'sysfs', '/var/lib/mock/sclpy36-7-x86_64/root/sys'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/dev/shm
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/mount', '-n', '-t', 'tmpfs', 'tmpfs', '/var/lib/mock/sclpy36-7-x86_64/root/dev/shm'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/dev/pts
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/mount', '-n', '-t', 'devpts', '-o', 'gid=5,mode=0620,ptmxmode=0666,newinstance', 'devpts', '/var/lib/mock/sclpy36-7-x86_64/root/dev/pts'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG package_manager.py:122:  ['/usr/bin/yum', '--installroot', '/var/lib/mock/sclpy36-7-x86_64/root/', '-y', '--releasever', '7', 'update']
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/usr/bin/yum', '--installroot', '/var/lib/mock/sclpy36-7-x86_64/root/', '-y', '--releasever', '7', 'update'] with env {'TERM': 'vt100', 'SHELL': '/bin/bash', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'PROMPT_COMMAND': 'printf "\\033]0;<mock-chroot>\\007"', 'PS1': '<mock-chroot> \\s-\\v\\$ ', 'LANG': 'C', 'LC_MESSAGES': 'C.UTF-8'} and shell False
+DEBUG util.py:585:  BUILDSTDERR: Failed to set locale, defaulting to C
+DEBUG util.py:587:  Resolving Dependencies
+DEBUG util.py:587:  --> Running transaction check
+DEBUG util.py:587:  ---> Package python-rpm-macros.noarch 0:3-24.el7 will be updated
+DEBUG util.py:587:  ---> Package python-rpm-macros.noarch 0:3-25.el7 will be an update
+DEBUG util.py:587:  ---> Package python-srpm-macros.noarch 0:3-24.el7 will be updated
+DEBUG util.py:587:  ---> Package python-srpm-macros.noarch 0:3-25.el7 will be an update
+DEBUG util.py:587:  ---> Package python2-rpm-macros.noarch 0:3-24.el7 will be updated
+DEBUG util.py:587:  ---> Package python2-rpm-macros.noarch 0:3-25.el7 will be an update
+DEBUG util.py:587:  ---> Package tzdata.noarch 0:2019a-1.el7 will be updated
+DEBUG util.py:587:  ---> Package tzdata.noarch 0:2019b-1.el7 will be an update
+DEBUG util.py:587:  --> Finished Dependency Resolution
+DEBUG util.py:587:  Dependencies Resolved
+DEBUG util.py:587:  ================================================================================
+DEBUG util.py:587:   Package                  Arch         Version              Repository     Size
+DEBUG util.py:587:  ================================================================================
+DEBUG util.py:587:  Updating:
+DEBUG util.py:587:   python-rpm-macros        noarch       3-25.el7             epel          8.0 k
+DEBUG util.py:587:   python-srpm-macros       noarch       3-25.el7             epel          7.5 k
+DEBUG util.py:587:   python2-rpm-macros       noarch       3-25.el7             epel          6.7 k
+DEBUG util.py:587:   tzdata                   noarch       2019b-1.el7          updates       491 k
+DEBUG util.py:587:  Transaction Summary
+DEBUG util.py:587:  ================================================================================
+DEBUG util.py:587:  Upgrade  4 Packages
+DEBUG util.py:587:  Total size: 513 k
+DEBUG util.py:587:  Downloading packages:
+DEBUG util.py:587:  Running transaction check
+DEBUG util.py:587:  Running transaction test
+DEBUG util.py:587:  Transaction test succeeded
+DEBUG util.py:587:  Running transaction
+DEBUG util.py:587:    Updating   : python-srpm-macros-3-25.el7.noarch                           1/8 
+DEBUG util.py:587:    Updating   : python-rpm-macros-3-25.el7.noarch                            2/8 
+DEBUG util.py:587:    Updating   : python2-rpm-macros-3-25.el7.noarch                           3/8 
+DEBUG util.py:587:    Updating   : tzdata-2019b-1.el7.noarch                                    4/8 
+DEBUG util.py:587:    Cleanup    : python-rpm-macros-3-24.el7.noarch                            5/8 
+DEBUG util.py:587:    Cleanup    : python-srpm-macros-3-24.el7.noarch                           6/8 
+DEBUG util.py:587:    Cleanup    : python2-rpm-macros-3-24.el7.noarch                           7/8 
+DEBUG util.py:587:    Cleanup    : tzdata-2019a-1.el7.noarch                                    8/8 
+DEBUG util.py:587:    Verifying  : python-rpm-macros-3-25.el7.noarch                            1/8 
+DEBUG util.py:587:    Verifying  : tzdata-2019b-1.el7.noarch                                    2/8 
+DEBUG util.py:587:    Verifying  : python-srpm-macros-3-25.el7.noarch                           3/8 
+DEBUG util.py:587:    Verifying  : python2-rpm-macros-3-25.el7.noarch                           4/8 
+DEBUG util.py:587:    Verifying  : python-rpm-macros-3-24.el7.noarch                            5/8 
+DEBUG util.py:587:    Verifying  : python2-rpm-macros-3-24.el7.noarch                           6/8 
+DEBUG util.py:587:    Verifying  : python-srpm-macros-3-24.el7.noarch                           7/8 
+DEBUG util.py:587:    Verifying  : tzdata-2019a-1.el7.noarch                                    8/8 
+DEBUG util.py:587:  Updated:
+DEBUG util.py:587:    python-rpm-macros.noarch 0:3-25.el7    python-srpm-macros.noarch 0:3-25.el7  
+DEBUG util.py:587:    python2-rpm-macros.noarch 0:3-25.el7   tzdata.noarch 0:2019b-1.el7           
+DEBUG util.py:587:  Complete!
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/umount', '-n', '-l', '/var/lib/mock/sclpy36-7-x86_64/root/dev/pts'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/umount', '-n', '-l', '/var/lib/mock/sclpy36-7-x86_64/root/dev/shm'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/umount', '-n', '-l', '/var/lib/mock/sclpy36-7-x86_64/root/sys'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/umount', '-n', '-l', '/var/lib/mock/sclpy36-7-x86_64/root/proc'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:224:  touching file: /var/lib/mock/sclpy36-7-x86_64/root/.initialized
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:676:  Using nspawn with args ['--capability=cap_ipc_lock', '--bind=/tmp/mock-resolv.etmcmc9m:/etc/resolv.conf']
+DEBUG util.py:679:  Executing command: ['/usr/bin/systemd-nspawn', '-q', '-M', 'b7752aa44a8743818290e190b9c251f7', '-D', '/var/lib/mock/sclpy36-7-x86_64/root', '--capability=cap_ipc_lock', '--bind=/tmp/mock-resolv.etmcmc9m:/etc/resolv.conf', '--setenv=TERM=vt100', '--setenv=SHELL=/bin/bash', '--setenv=HOME=/builddir', '--setenv=HOSTNAME=mock', '--setenv=PATH=/usr/bin:/bin:/usr/sbin:/sbin', '--setenv=PROMPT_COMMAND=printf "\\033]0;<mock-chroot>\\007"', '--setenv=PS1=<mock-chroot> \\s-\\v\\$ ', '--setenv=LANG=C', '-u', 'mockbuild', '/bin/rpm', '-Uvh', '--nodeps', '/builddir/build/originals/sclpy36-7-x86_64.src.rpm'] with env {'TERM': 'vt100', 'SHELL': '/bin/bash', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'PROMPT_COMMAND': 'printf "\\033]0;<mock-chroot>\\007"', 'PS1': '<mock-chroot> \\s-\\v\\$ ', 'LANG': 'C'} and shell False
+DEBUG util.py:420:  Unsharing. Flags: 1073741824
+DEBUG util.py:420:  Unsharing. Flags: 134217728
+DEBUG util.py:587:  Updating / installing...
+DEBUG util.py:587:  python-ply-3.11-0.el7                 ########################################
+DEBUG util.py:585:  BUILDSTDERR: warning: user nkadel does not exist - using root
+DEBUG util.py:585:  BUILDSTDERR: warning: group nkadel does not exist - using root
+DEBUG util.py:585:  BUILDSTDERR: warning: user nkadel does not exist - using root
+DEBUG util.py:585:  BUILDSTDERR: warning: group nkadel does not exist - using root
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:676:  Using nspawn with args ['--capability=cap_ipc_lock', '--bind=/tmp/mock-resolv.etmcmc9m:/etc/resolv.conf']
+DEBUG util.py:679:  Executing command: ['/usr/bin/systemd-nspawn', '-q', '-M', '05a4b67d46c143eb9f8d14343dd0b013', '-D', '/var/lib/mock/sclpy36-7-x86_64/root', '--capability=cap_ipc_lock', '--bind=/tmp/mock-resolv.etmcmc9m:/etc/resolv.conf', '--setenv=TERM=vt100', '--setenv=SHELL=/bin/bash', '--setenv=HOME=/builddir', '--setenv=HOSTNAME=mock', '--setenv=PATH=/usr/bin:/bin:/usr/sbin:/sbin', '--setenv=PROMPT_COMMAND=printf "\\033]0;<mock-chroot>\\007"', '--setenv=PS1=<mock-chroot> \\s-\\v\\$ ', '--setenv=LANG=C', '-u', 'mockbuild', '/bin/rpm', '-qpl', '/builddir/build/originals/sclpy36-7-x86_64.src.rpm'] with env {'TERM': 'vt100', 'SHELL': '/bin/bash', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'PROMPT_COMMAND': 'printf "\\033]0;<mock-chroot>\\007"', 'PS1': '<mock-chroot> \\s-\\v\\$ ', 'LANG': 'C'} and shell False
+DEBUG util.py:420:  Unsharing. Flags: 1073741824
+DEBUG util.py:420:  Unsharing. Flags: 134217728
+DEBUG util.py:587:  ply-3.11.tar.gz
+DEBUG util.py:587:  python-ply.spec
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:420:  Unsharing. Flags: 1073741824
+DEBUG util.py:420:  Unsharing. Flags: 134217728
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/proc
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/mount', '-n', '-t', 'proc', 'proc', '/var/lib/mock/sclpy36-7-x86_64/root/proc'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/sys
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/mount', '-n', '-t', 'sysfs', 'sysfs', '/var/lib/mock/sclpy36-7-x86_64/root/sys'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/dev/shm
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/mount', '-n', '-t', 'tmpfs', 'tmpfs', '/var/lib/mock/sclpy36-7-x86_64/root/dev/shm'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:211:  ensuring that dir exists: /var/lib/mock/sclpy36-7-x86_64/root/dev/pts
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/mount', '-n', '-t', 'devpts', '-o', 'gid=5,mode=0620,ptmxmode=0666,newinstance', 'devpts', '/var/lib/mock/sclpy36-7-x86_64/root/dev/pts'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG package_manager.py:122:  ['/usr/bin/yum-builddep', '--installroot', '/var/lib/mock/sclpy36-7-x86_64/root/', '--releasever', '7', '/var/lib/mock/sclpy36-7-x86_64/root//builddir/build/SRPMS/rh-python36-python-ply-3.11-0.el7.src.rpm']
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/usr/bin/yum-builddep', '--installroot', '/var/lib/mock/sclpy36-7-x86_64/root/', '--releasever', '7', '/var/lib/mock/sclpy36-7-x86_64/root//builddir/build/SRPMS/rh-python36-python-ply-3.11-0.el7.src.rpm'] with env {'TERM': 'vt100', 'SHELL': '/bin/bash', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'PROMPT_COMMAND': 'printf "\\033]0;<mock-chroot>\\007"', 'PS1': '<mock-chroot> \\s-\\v\\$ ', 'LANG': 'C', 'LC_MESSAGES': 'C.UTF-8'} and shell False
+DEBUG util.py:585:  BUILDSTDERR: Failed to set locale, defaulting to C
+DEBUG util.py:587:  Getting requirements for rh-python36-python-ply-3.11-0.el7.src
+DEBUG util.py:587:   --> Already installed : scl-utils-build-20130529-19.el7.x86_64
+DEBUG util.py:587:   --> rh-python36-python-devel-3.6.3-7.el7.x86_64
+DEBUG util.py:587:   --> rh-python36-python-setuptools-36.5.0-1.el7.noarch
+DEBUG util.py:587:  --> Running transaction check
+DEBUG util.py:587:  ---> Package rh-python36-python-devel.x86_64 0:3.6.3-7.el7 will be installed
+DEBUG util.py:587:  --> Processing Dependency: rh-python36-python-libs(x86-64) = 3.6.3-7.el7 for package: rh-python36-python-devel-3.6.3-7.el7.x86_64
+DEBUG util.py:587:  --> Processing Dependency: rh-python36-python(x86-64) = 3.6.3-7.el7 for package: rh-python36-python-devel-3.6.3-7.el7.x86_64
+DEBUG util.py:587:  --> Processing Dependency: rh-python36-python(abi) = 3.6 for package: rh-python36-python-devel-3.6.3-7.el7.x86_64
+DEBUG util.py:587:  --> Processing Dependency: /opt/rh/rh-python36/root/usr/bin/python3.6m for package: rh-python36-python-devel-3.6.3-7.el7.x86_64
+DEBUG util.py:587:  --> Processing Dependency: libpython3.6m.so.rh-python36-1.0()(64bit) for package: rh-python36-python-devel-3.6.3-7.el7.x86_64
+DEBUG util.py:587:  ---> Package rh-python36-python-setuptools.noarch 0:36.5.0-1.el7 will be installed
+DEBUG util.py:587:  --> Running transaction check
+DEBUG util.py:587:  ---> Package rh-python36-python.x86_64 0:3.6.3-7.el7 will be installed
+DEBUG util.py:587:  --> Processing Dependency: rh-python36-python-pip for package: rh-python36-python-3.6.3-7.el7.x86_64
+DEBUG util.py:587:  ---> Package rh-python36-python-libs.x86_64 0:3.6.3-7.el7 will be installed
+DEBUG util.py:587:  --> Running transaction check
+DEBUG util.py:587:  ---> Package rh-python36-python-pip.noarch 0:9.0.1-2.el7 will be installed
+DEBUG util.py:587:  --> Finished Dependency Resolution
+DEBUG util.py:587:  Dependencies Resolved
+DEBUG util.py:587:  ================================================================================
+DEBUG util.py:587:   Package                          Arch      Version            Repository  Size
+DEBUG util.py:587:  ================================================================================
+DEBUG util.py:587:  Installing:
+DEBUG util.py:587:   rh-python36-python-devel         x86_64    3.6.3-7.el7        sclo-rh    841 k
+DEBUG util.py:587:   rh-python36-python-setuptools    noarch    36.5.0-1.el7       sclo-rh    566 k
+DEBUG util.py:587:  Installing for dependencies:
+DEBUG util.py:587:   rh-python36-python               x86_64    3.6.3-7.el7        sclo-rh     55 k
+DEBUG util.py:587:   rh-python36-python-libs          x86_64    3.6.3-7.el7        sclo-rh    7.5 M
+DEBUG util.py:587:   rh-python36-python-pip           noarch    9.0.1-2.el7        sclo-rh    1.7 M
+DEBUG util.py:587:  Transaction Summary
+DEBUG util.py:587:  ================================================================================
+DEBUG util.py:587:  Install  2 Packages (+3 Dependent packages)
+DEBUG util.py:587:  Total size: 11 M
+DEBUG util.py:587:  Installed size: 52 M
+DEBUG util.py:587:  Downloading packages:
+DEBUG util.py:587:  Running transaction check
+DEBUG util.py:587:  Running transaction test
+DEBUG util.py:587:  Transaction test succeeded
+DEBUG util.py:587:  Running transaction
+DEBUG util.py:587:    Installing : rh-python36-python-libs-3.6.3-7.el7.x86_64                   1/5 
+DEBUG util.py:587:    Installing : rh-python36-python-3.6.3-7.el7.x86_64                        2/5 
+DEBUG util.py:587:    Installing : rh-python36-python-setuptools-36.5.0-1.el7.noarch            3/5 
+DEBUG util.py:587:    Installing : rh-python36-python-pip-9.0.1-2.el7.noarch                    4/5 
+DEBUG util.py:587:    Installing : rh-python36-python-devel-3.6.3-7.el7.x86_64                  5/5 
+DEBUG util.py:587:    Verifying  : rh-python36-python-setuptools-36.5.0-1.el7.noarch            1/5 
+DEBUG util.py:587:    Verifying  : rh-python36-python-3.6.3-7.el7.x86_64                        2/5 
+DEBUG util.py:587:    Verifying  : rh-python36-python-devel-3.6.3-7.el7.x86_64                  3/5 
+DEBUG util.py:587:    Verifying  : rh-python36-python-pip-9.0.1-2.el7.noarch                    4/5 
+DEBUG util.py:587:    Verifying  : rh-python36-python-libs-3.6.3-7.el7.x86_64                   5/5 
+DEBUG util.py:587:  Installed:
+DEBUG util.py:587:    rh-python36-python-devel.x86_64 0:3.6.3-7.el7                                 
+DEBUG util.py:587:    rh-python36-python-setuptools.noarch 0:36.5.0-1.el7                           
+DEBUG util.py:587:  Dependency Installed:
+DEBUG util.py:587:    rh-python36-python.x86_64 0:3.6.3-7.el7                                       
+DEBUG util.py:587:    rh-python36-python-libs.x86_64 0:3.6.3-7.el7                                  
+DEBUG util.py:587:    rh-python36-python-pip.noarch 0:9.0.1-2.el7                                   
+DEBUG util.py:587:  Complete!
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/umount', '-n', '-l', '/var/lib/mock/sclpy36-7-x86_64/root/dev/pts'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/umount', '-n', '-l', '/var/lib/mock/sclpy36-7-x86_64/root/dev/shm'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/umount', '-n', '-l', '/var/lib/mock/sclpy36-7-x86_64/root/sys'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/umount', '-n', '-l', '/var/lib/mock/sclpy36-7-x86_64/root/proc'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: rpm -qa --root '/var/lib/mock/sclpy36-7-x86_64/root' --qf '%{nevra} %{buildtime} %{size} %{pkgid} installed\n' > /home/nkadel/git/nkadel-ansible-awx-depends/buildrepo/rh-python36-python-ply-srpm/sclpy36-7-x86_64/installed_pkgs.log with env {'TERM': 'vt100', 'SHELL': '/bin/bash', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'PROMPT_COMMAND': 'printf "\\033]0;<mock-chroot>\\007"', 'PS1': '<mock-chroot> \\s-\\v\\$ ', 'LANG': 'C'} and shell True
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:420:  Unsharing. Flags: 1073741824
+DEBUG util.py:420:  Unsharing. Flags: 134217728
+DEBUG backend.py:572:  Copying packages to result dir
+DEBUG util.py:323:  kill orphans
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['/bin/umount', '-n', '/var/lib/mock/sclpy36-7-x86_64/root/var/cache/yum/'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 0
+DEBUG util.py:753:  child environment: None
+DEBUG util.py:679:  Executing command: ['btrfs', 'subv', 'list', '/var/lib/mock'] with env {'TERM': 'vt100', 'SHELL': '/bin/sh', 'HOME': '/builddir', 'HOSTNAME': 'mock', 'PATH': '/usr/bin:/bin:/usr/sbin:/sbin', 'LANG': 'C'} and shell False
+DEBUG util.py:734:  Child return code was: 1
+DEBUG util.py:1524:  Please ignore the error above above about btrfs.
