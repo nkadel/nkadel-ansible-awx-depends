@@ -1,156 +1,189 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-baron
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name baron
-%define version 0.6.6
-%define unmangled_version 0.6.6
-%define unmangled_version 0.6.6
-%define release 1
+%global pypi_name baron
 
-Summary: Full Syntax Tree for python to make writing refactoring code a realist task
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}%{pkg_name}
-Version: %{version}
-Release: %{release}
-Source0: baron-%{unmangled_version}.tar.gz
-License: lgplv3+
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{pkg_name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Laurent Peuch <cortex@worlddomination.be>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/PyCQA/baron
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        0.6.6
+Release:        0%{?dist}
+Url:            https://github.com/PyCQA/baron
+Summary:        Full Syntax Tree for python to make writing refactoring code a realist task
+License:        lgplv3+ (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+BuildRequires:  %{?scl_prefix}python-rply
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 Introduction
 ============
 
-Baron is a Full Syntax Tree (FST) library for Python. By opposition to an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) which
-drops some syntax information in the process of its creation (like empty lines,
-comments, formatting), a FST keeps everything and guarantees the operation
-<code>fst\_to\_code(code\_to\_fst(source\_code)) == source\_code</code>.
+Baron is a Full Syntax Tree (FST) library for Python. By opposition to
+an `AST <https://en.wikipedia.org/wiki/Abstract_syntax_tree>`__ which
+drops some syntax information in the process of its creation (like empty
+lines, comments, formatting), a FST keeps everything and guarantees the
+operation fst\_to\_code(code\_to\_fst(source\_code)) == source\_code.
 
 Installation
 ============
+
+::
 
     pip install baron
 
 Basic Usage
 ===========
 
-```python
-from baron import parse, dumps
+.. code:: python
 
-fst = parse(source_code_string)
-source_code_string == dumps(fst)
-```
+    from baron import parse, dumps
+
+    fst = parse(source_code_string)
+    source_code_string == dumps(fst)
 
 Except if you want to do low level things, **use
-[RedBaron](https://github.com/PyCQA/redbaron) instead of using Baron
-directly**. Think of Baron as the "bytecode of python source code" and RedBaron
-as some sort of usable layer on top of it.
+`RedBaron <https://github.com/PyCQA/redbaron>`__ instead of using Baron
+directly**. Think of Baron as the "bytecode of python source code" and
+RedBaron as some sort of usable layer on top of it.
 
 If you don't know what Baron is or don't understand yet why it might be
-useful for you, read the [« Why is this important? » section](#why-is-this-important).
+useful for you, read the `&#171;&#160;Why is this important?&#160;&#187;
+section <#why-is-this-important>`__.
 
 Documentation
 =============
 
-Baron documentation is available on [Read The Docs](http://baron.readthedocs.io/en/latest/).
+Baron documentation is available on `Read The
+Docs <http://baron.readthedocs.io/en/latest/>`__.
 
 Why is this important?
 ======================
 
-The usage of a FST might not be obvious at first sight so let's consider a
-series of problems to illustrate it. Let's say that you want to write a program that will:
+The usage of a FST might not be obvious at first sight so let's consider
+a series of problems to illustrate it. Let's say that you want to write
+a program that will:
 
-* rename a variable in a source file... without clashing with things that are not a variable (example: stuff inside a string)
-* inline a function/method
-* extract a function/method from a series of line of code
-* split a class into several classes
-* split a file into several modules
-* convert your whole code base from one ORM to another
-* do custom refactoring operation not implemented by IDE/rope
-* implement the class browser of smalltalk for python (the whole one where you can edit the code of the methods, not just showing code)
+-  rename a variable in a source file... without clashing with things
+   that are not a variable (example: stuff inside a string)
+-  inline a function/method
+-  extract a function/method from a series of line of code
+-  split a class into several classes
+-  split a file into several modules
+-  convert your whole code base from one ORM to another
+-  do custom refactoring operation not implemented by IDE/rope
+-  implement the class browser of smalltalk for python (the whole one
+   where you can edit the code of the methods, not just showing code)
 
-It is very likely that you will end up with the awkward feeling of writing
-clumpsy weak code that is very likely to break because you didn't thought about
-all the annoying special cases and the formatting keeps bothering you. You may
-end up playing with [ast.py](http://docs.python.org/2/library/ast.html) until
-you realize that it removes too much information to be suitable for those
-situations. You will probably ditch this task as simple too complicated and
-really not worth the effort. You are missing a good abstraction that will take
-care of all of the code structure and formatting for you so you can concentrate
-on your task.
+It is very likely that you will end up with the awkward feeling of
+writing clumpsy weak code that is very likely to break because you
+didn't thought about all the annoying special cases and the formatting
+keeps bothering you. You may end up playing with
+`ast.py <http://docs.python.org/2/library/ast.html>`__ until you realize
+that it removes too much information to be suitable for those
+situations. You will probably ditch this task as simple too complicated
+and really not worth the effort. You are missing a good abstraction that
+will take care of all of the code structure and formatting for you so
+you can concentrate on your task.
 
-The FST tries to be this abstraction. With it you can now work on a tree which
-represents your code with its formatting. Moreover, since it is the exact
-representation of your code, modifying it and converting it back to a string
-will give you back your code only modified where you have modified the tree.
+The FST tries to be this abstraction. With it you can now work on a tree
+which represents your code with its formatting. Moreover, since it is
+the exact representation of your code, modifying it and converting it
+back to a string will give you back your code only modified where you
+have modified the tree.
 
-Said in another way, what I'm trying to achieve with Baron is a paradigm change in
-which writing code that will modify code is now a realist task that is worth
-the price (I'm not saying a simple task, but a realistic one: it's still a
-complex task).
+Said in another way, what I'm trying to achieve with Baron is a paradigm
+change in which writing code that will modify code is now a realist task
+that is worth the price (I'm not saying a simple task, but a realistic
+one: it's still a complex task).
 
 Other
 -----
 
-Having a FST (or at least a good abstraction build on it) also makes it easier
-to do code generation and code analysis while those two operations are already
-quite feasible (using [ast.py](http://docs.python.org/2/library/ast.html) 
-and a templating engine for example).
+Having a FST (or at least a good abstraction build on it) also makes it
+easier to do code generation and code analysis while those two
+operations are already quite feasible (using
+`ast.py <http://docs.python.org/2/library/ast.html>`__ and a templating
+engine for example).
 
 Some technical details
 ======================
 
-Baron produces a FST in the form of JSON (and by JSON I mean Python lists
-and dicts that can be dumped into JSON) for maximum interoperability.
+Baron produces a FST in the form of JSON (and by JSON I mean Python
+lists and dicts that can be dumped into JSON) for maximum
+interoperability.
 
-Baron FST is quite similar to Python AST with some modifications to be more
-intuitive to humans, since Python AST has been made for CPython interpreter.
+Baron FST is quite similar to Python AST with some modifications to be
+more intuitive to humans, since Python AST has been made for CPython
+interpreter.
 
-Since playing directly with JSON is a bit raw I'm going to build an abstraction
-on top of it that will looks like BeautifulSoup/jQuery.
+Since playing directly with JSON is a bit raw I'm going to build an
+abstraction on top of it that will looks like BeautifulSoup/jQuery.
 
 State of the project
 ====================
 
-Currently, Baron has been tested on the top 100 projects and the FST converts
-back exactly into the original source code. So, it can be considered quite
-stable, but it is far away from having been battle tested.
+Currently, Baron has been tested on the top 100 projects and the FST
+converts back exactly into the original source code. So, it can be
+considered quite stable, but it is far away from having been battle
+tested.
 
 Since the project is very young and no one is already using it except my
 project, I'm open to changes of the FST nodes but I will quickly become
 conservative once it gets some adoption and will probably accept to
-modify it only once or twice in the future with clear indications on how to
-migrate.
+modify it only once or twice in the future with clear indications on how
+to migrate.
 
-**Baron is targeting python 2.[67]**. It has not been tested on python3 but
-should be working for most parts (except the new grammar like <code>yield from</code>,
-obviously). Baron **runs** under python 2 and python 3.
+**Baron is targeting python 2.[67]**. It has not been tested on python3
+but should be working for most parts (except the new grammar like yield
+from, obviously). Baron **runs** under python 2 and python 3.
 
 Tests
 =====
-Run either `py.test tests/` or `nosetests` in the baron directory.
+
+Run either ``py.test tests/`` or ``nosetests`` in the baron directory.
 
 Community
 =========
 
-You can reach us on [irc.freenode.net#baron](https://webchat.freenode.net/?channels=%23baron) or [irc.freenode.net##python-code-quality](https://webchat.freenode.net/?channels=%23%23python-code-quality).
+You can reach us on
+`irc.freenode.net#baron <https://webchat.freenode.net/?channels=%23baron>`__
+or
+`irc.freenode.net##python-code-quality <https://webchat.freenode.net/?channels=%23%23python-code-quality>`__.
 
 Code of Conduct
 ===============
 
-As a member of [PyCQA](https://github.com/PyCQA), Baron follows its [Code of Conduct](http://meta.pycqa.org/en/latest/code-of-conduct.html).
+As a member of `PyCQA <https://github.com/PyCQA>`__, Baron follows its
+`Code of
+Conduct <http://meta.pycqa.org/en/latest/code-of-conduct.html>`__.
 
 Misc
 ====
-[Old blog post announcing the project.](http://worlddomination.be/blog/2013/the-baron-project-part-1-what-and-why.html) Not that much up to date.
+
+`Old blog post announcing the
+project. <http://worlddomination.be/blog/2013/the-baron-project-part-1-what-and-why.html>`__
+Not that much up to date.
 
 
 Changelog
@@ -307,36 +340,24 @@ Changelog
 - Init
 
 
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n baron-%{unmangled_version} -n baron-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-export LC_CTYPE=en_US.UTF-8
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-export LC_CTYPE=en_US.UTF-8
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
