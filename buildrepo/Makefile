@@ -44,8 +44,14 @@ build getsrc:: FORCE
 
 # python-lxml requires Cython
 #rh-python36-python-lxml-srpm:: rh-python36-Cython-srpm
+
 #rh-python36-python-cryptography-srpm:: rh-python36-python-cffi-srpm
 #rh-python36-python-cryptography-srpm:: rh-python36-python-pycparser-srpm
+#rh-python36-python-bcrypt-srpm:: rh-python36-python-cffi-srpm
+
+#rh-python36-python-xmlsec-srpm:: rh-python36-python-lxml-srpm
+#rh-python36-python-defusedxml-srpm:: rh-python36-python-lxml-srpm
+#rh-python36-python-ncclient-srpm:: rh-python36-python-lxml-srpm
 
 #rh-python36-python-Twisted-srpm:: rh-python36-python-incremental-srpm
 
@@ -59,6 +65,7 @@ build getsrc:: FORCE
 #rh-python36-python-ktyring-srpm:: rh-python36-python-setuptools_scm-srpm
 #rh-python36-python-jaraco.txt-srpm:: rh-python36-python-setuptools_scm-srpm
 #rh-python36-python-pytest-runner-srpm:: rh-python36-python-setuptools_scm-srpm
+#rh-python36-python-rst.linker-srpm:: rh-python36-python-setuptools_scm-srpm
 
 #rh-python36-python-jsonschema-srpm:: rh-python36-python-vcversioner-srpm
 
