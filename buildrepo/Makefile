@@ -53,6 +53,18 @@ build getsrc:: FORCE
 #rh-python36-python-defusedxml-srpm:: rh-python36-python-lxml-srpm
 #rh-python36-python-ncclient-srpm:: rh-python36-python-lxml-srpm
 
+#rh-python36-python-boto3-srpm:: rh-python36-python-botocore
+#rh-python36-python-boto3-srpm:: rh-python36-python-s3transfer-srpm
+#rh-python36-python-boto3-srpm:: rh-python36-python-mock
+#rh-python36-python-boto3-srpm:: rh-python36-python-jmespath
+
+
+#rh-python36-python-rply-srpm:: rh-python36-python-appdirs-srpm
+#rh-python36-python-baron-srpm:: rh-python36-python-rply-srpm
+#rh-python36-python-baron-srpm:: rh-python36-python-ply-srpm
+#rh-python36-python-baron-srpm:: rh-python36-python-pandoc-srpmn
+#rh-python36-python-baron-srpm:: rh-python36-python-pypandoc-srpmn
+
 #rh-python36-python-Twisted-srpm:: rh-python36-python-incremental-srpm
 
 #rh-python36-python-django-crum-srpm:: rh-python36-python-pytest-runner-srpm
@@ -62,7 +74,8 @@ build getsrc:: FORCE
 
 # setuptools_scm is not explicitly in "requires" lists because even to read
 # the lists, you need this installed first
-#rh-python36-python-ktyring-srpm:: rh-python36-python-setuptools_scm-srpm
+#rh-python36-python-tox-srpm:: rh-python36-python-setuptools_scm-srpm
+#rh-python36-python-keyring-srpm:: rh-python36-python-setuptools_scm-srpm
 #rh-python36-python-jaraco.txt-srpm:: rh-python36-python-setuptools_scm-srpm
 #rh-python36-python-pytest-runner-srpm:: rh-python36-python-setuptools_scm-srpm
 #rh-python36-python-rst.linker-srpm:: rh-python36-python-setuptools_scm-srpm

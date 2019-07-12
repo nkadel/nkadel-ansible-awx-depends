@@ -33,7 +33,8 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 %if %{with_dnf}
 # Manually added
 Suggests:       %{?scl_prefix}python-check-manifest = 0.35
-Suggests:       %{?scl_prefix}python-nose = 1.3.7
+#Suggests:       %{?scl_prefix}python-nose = 1.3.7
+Suggests:       %{?scl_prefix}python-nose >= 1.3.7
 Suggests:       %{?scl_prefix}python-psutil = 5.2.2
 Suggests:       %{?scl_prefix}python-readme_renderer = 17.2
 Suggests:       %{?scl_prefix}python-mock = 2.0.0
