@@ -1,29 +1,50 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-boto3
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name boto3
-%define version 1.6.2
-%define unmangled_version 1.6.2
-%define unmangled_version 1.6.2
-%define release 1
+%global pypi_name boto3
 
-Summary: The AWS SDK for Python
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}boto3
-Version: %{version}
-Release: %{release}
-Source0: boto3-%{unmangled_version}.tar.gz
-License: Apache License 2.0
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/boto3-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Amazon Web Services <UNKNOWN>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/boto/boto3
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        1.6.2
+Release:        0%{?dist}
+Url:            https://github.com/boto/boto3
+Summary:        The AWS SDK for Python
+License:        Apache-2.0
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-nose  1.3.3
+Requires:       %{?scl_prefix}python-mock = 1.3.0
+Requires:       %{?scl_prefix}python-wheel = 0.24.0
+# For python 2.6
+#Requires:       %{?scl_prefix}python-unittest2 = 0.5.1
+
+Requires:       %{?scl_prefix}python-botocore < 1.10.0
+Requires:       %{?scl_prefix}python-botocore >= 1.9.2
+Requires:       %{?scl_prefix}python-jmespath < 1.0.0
+Requires:       %{?scl_prefix}python-jmespath >= 0.7.1
+Requires:       %{?scl_prefix}python-s3transfer < 0.2.0
+Requires:       %{?scl_prefix}python-s3transfer >= 0.1.10
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 ===============================
@@ -157,35 +178,24 @@ help:
 * Open a support ticket with `AWS Support <https://console.aws.amazon.com/support/home#/>`__
 * If it turns out that you may have found a bug, please `open an issue <https://github.com/boto/boto3/issues/new>`__
 
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n boto3-%{unmangled_version} -n boto3-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
