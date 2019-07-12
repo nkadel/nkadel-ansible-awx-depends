@@ -1,29 +1,48 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-billiard
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name billiard
-%define version 3.5.0.4
-%define unmangled_version 3.5.0.4
-%define unmangled_version 3.5.0.4
-%define release 1
+%global pypi_name billiard
 
-Summary: Python multiprocessing fork with improvements and bugfixes
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}%{pkg_name}
-Version: %{version}
-Release: %{release}
-Source0: billiard-%{unmangled_version}.tar.gz
-License: BSD
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{pkg_name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Ask Solem <ask@celeryproject.org>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: http://github.com/celery/billiard
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        3.5.0.4
+Release:        0%{?dist}
+Url:            http://github.com/celery/billiard
+Summary:        Python multiprocessing fork with improvements and bugfixes
+License:        BSD (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+%if %{with_dnf}
+# M<anually added for pkgutils
+Suggests:       %{?scl_prefix}python-wheel >= 0.29.0
+Suggests:       %{?scl_prefix}python-flake8 >= 2.5.4
+Suggests:       %{?scl_prefix}python-flakeplus >= 1.1
+Suggests:       %{?scl_prefix}python-tox >= 2.3.1
+# Manually added for test
+Suggests:       %{?scl_prefix}python-case >= 1.3.1
+Suggests:       %{?scl_prefix}python-pytest >= 3.0
+# Manuallyed added for test-c1
+Suggests:       %{?scl_prefix}python-pytest-cov
+%endif # with_dnf
 
 %description
 ========
@@ -31,38 +50,9 @@ billiard
 ========
 :version: 3.5.0.4
 
-|build-status-lin| |build-status-win| |license| |wheel| |pyversion| |pyimp|
-
-.. |build-status-lin| image:: https://secure.travis-ci.org/celery/billiard.png?branch=master
-    :alt: Build status on Linux
-    :target: https://travis-ci.org/celery/billiard
-
-.. |build-status-win| image:: https://ci.appveyor.com/api/projects/status/github/celery/billiard?png=true&branch=master
-    :alt: Build status on Windows
-    :target: https://ci.appveyor.com/project/ask/billiard
-
-.. |license| image:: https://img.shields.io/pypi/l/billiard.svg
-    :alt: BSD License
-    :target: https://opensource.org/licenses/BSD-3-Clause
-
-.. |wheel| image:: https://img.shields.io/pypi/wheel/billiard.svg
-    :alt: Billiard can be installed via wheel
-    :target: https://pypi.org/project/billiard/
-
-.. |pyversion| image:: https://img.shields.io/pypi/pyversions/billiard.svg
-    :alt: Supported Python versions.
-    :target: https://pypi.org/project/billiard/
-
-.. |pyimp| image:: https://img.shields.io/pypi/implementation/billiard.svg
-    :alt: Support Python implementations.
-    :target: https://pypi.org/project/billiard/
-
-About
------
-
 `billiard` is a fork of the Python 2.7 `multiprocessing <http://docs.python.org/library/multiprocessing.html>`_
 package. The multiprocessing package itself is a renamed and updated version of
-R Oudkerk's `pyprocessing <https://pypi.org/project/processing/>`_ package.
+R Oudkerk `pyprocessing <https://pypi.org/project/processing/>`_ package.
 This standalone variant draws its fixes/improvements from python-trunk and provides
 additional bug fixes and improvements.
 
@@ -88,35 +78,24 @@ Please report bugs related to multiprocessing at the
 `Python bug tracker <http://bugs.python.org/>`_. Issues related to billiard
 should be reported at http://github.com/celery/billiard/issues.
 
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n billiard-%{unmangled_version} -n billiard-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
