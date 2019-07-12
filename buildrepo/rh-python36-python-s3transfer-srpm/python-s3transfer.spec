@@ -37,7 +37,8 @@ Requires:       %{?scl_prefix}python-futures < 4.0.0
 Requires:       %{?scl_prefix}python-futures >= 2.2.0
 %if %{with_dnf}
 # Manually added for test
-Suggests:       %{?scl_prefix}python-nose = 1.3.3
+#Suggests:       %{?scl_prefix}python-nose = 1.3.3
+Suggests:       %{?scl_prefix}python-nose >= 1.3.3
 Suggests:       %{?scl_prefix}python-mock = 1.3.0
 Suggests:       %{?scl_prefix}python-coverage = 4.0.1
 Suggests:       %{?scl_prefix}python-wheel = 0.24.0

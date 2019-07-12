@@ -36,7 +36,8 @@ Requires:       %{?scl_prefix}python-docutils >= 0.10
 Requires:       %{?scl_prefix}python-jmespath < 1.0.0
 Requires:       %{?scl_prefix}python-jmespath >= 0.7.1
 Requires:       %{?scl_prefix}python-mock = 1.0.1
-Requires:       %{?scl_prefix}python-nose = 1.3.0
+#Requires:       %{?scl_prefix}python-nose = 1.3.0
+Requires:       %{?scl_prefix}python-nose >= 1.3.0
 Requires:       %{?scl_prefix}python-python-dateutil < 3.0.0
 Requires:       %{?scl_prefix}python-python-dateutil >= 2.1
 Requires:       %{?scl_prefix}python-tox = 1.4
