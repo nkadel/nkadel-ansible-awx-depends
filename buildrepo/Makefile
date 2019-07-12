@@ -68,7 +68,8 @@ build getsrc:: FORCE
 
 # setuptools_scm is not explicitly in "requires" lists because even to read
 # the lists, you need this installed first
-#rh-python36-python-ktyring-srpm:: rh-python36-python-setuptools_scm-srpm
+#rh-python36-python-tox-srpm:: rh-python36-python-setuptools_scm-srpm
+#rh-python36-python-keyring-srpm:: rh-python36-python-setuptools_scm-srpm
 #rh-python36-python-jaraco.txt-srpm:: rh-python36-python-setuptools_scm-srpm
 #rh-python36-python-pytest-runner-srpm:: rh-python36-python-setuptools_scm-srpm
 
