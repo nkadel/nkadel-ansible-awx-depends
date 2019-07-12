@@ -32,6 +32,9 @@ BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
 Requires:       %{?scl_prefix}python-ply
+# Manually added for libraries
+BuildRequires:       pandoc
+Requires:       pandoc
 %if %{with_dnf}
 %endif # with_dnf
 
