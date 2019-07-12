@@ -40,7 +40,8 @@ Requires:       %{?scl_prefix}python-mock = 1.0.1
 Requires:       %{?scl_prefix}python-nose >= 1.3.0
 Requires:       %{?scl_prefix}python-python-dateutil < 3.0.0
 Requires:       %{?scl_prefix}python-python-dateutil >= 2.1
-Requires:       %{?scl_prefix}python-tox = 1.4
+#Requires:       %{?scl_prefix}python-tox = 1.4
+Requires:       %{?scl_prefix}python-tox >= 1.4
 #Requires:       %{?scl_prefix}python-wheel = 0.24.0
 Requires:       %{?scl_prefix}python-wheel >= 0.24.0
 
