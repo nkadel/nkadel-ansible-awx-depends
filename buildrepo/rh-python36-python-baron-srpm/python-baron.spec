@@ -32,6 +32,11 @@ BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
 BuildRequires:  %{?scl_prefix}python-rply
+# Manually added, not in requires
+BuildRequires:  %{?scl_prefix}python-ply
+BuildRequires:  %{?scl_prefix}python-pypandoc
+BuildRequires:  %{?scl_prefix}python-pandoc
+BuildRequires:  pandoc
 %if %{with_dnf}
 %endif # with_dnf
 
