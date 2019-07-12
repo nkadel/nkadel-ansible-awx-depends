@@ -47,6 +47,18 @@ build getsrc:: FORCE
 #rh-python36-python-cryptography-srpm:: rh-python36-python-cffi-srpm
 #rh-python36-python-cryptography-srpm:: rh-python36-python-pycparser-srpm
 
+#rh-python36-python-boto3-srpm:: rh-python36-python-botocore
+#rh-python36-python-boto3-srpm:: rh-python36-python-s3transfer-srpm
+#rh-python36-python-boto3-srpm:: rh-python36-python-mock
+#rh-python36-python-boto3-srpm:: rh-python36-python-jmespath
+
+
+#rh-python36-python-rply-srpm:: rh-python36-python-appdirs-srpm
+#rh-python36-python-baron-srpm:: rh-python36-python-rply-srpm
+#rh-python36-python-baron-srpm:: rh-python36-python-ply-srpm
+#rh-python36-python-baron-srpm:: rh-python36-python-pandoc-srpmn
+#rh-python36-python-baron-srpm:: rh-python36-python-pypandoc-srpmn
+
 #rh-python36-python-Twisted-srpm:: rh-python36-python-incremental-srpm
 
 #rh-python36-python-django-crum-srpm:: rh-python36-python-pytest-runner-srpm
