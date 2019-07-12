@@ -1,30 +1,45 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-python-memcached
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name python-memcached
-%define version 1.59
-%define unmangled_version 1.59
-%define unmangled_version 1.59
-%define release 1
+%global pypi_name python-memcached
 
-Summary: Pure python memcached client
-Name: %{?scl_prefix}%{pkg_name}
-Version: %{version}
-Release: %{release}
-Source0: python-memcached-%{unmangled_version}.tar.gz
-License: UNKNOWN
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{pkg_name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Sean Reifschneider <jafo@tummy.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Requires: %{?scl_prefix}python-memcached
-Url: https://github.com/linsomniac/python-memcached
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        1.59
+Release:        0%{?dist}
+Url:            https://github.com/linsomniac/python-memcached
+Summary:        Pure python memcached client
+License:        Python-2.0
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-six >= 1.4.0
+%if %{with_dnf}
+# Manually added for tests
+Suggests:       %{?scl_prefix}python-
+Suggests:       %{?scl_prefix}python-nose
+Suggests:       %{?scl_prefix}python-coverage
+Suggests:       %{?scl_prefix}python-hacking
+Suggests:       %{?scl_prefix}python-mock
+%endif # with_dnf
 
 %description
 [![Build
@@ -41,54 +56,27 @@ This package was originally written by Evan Martin of Danga.  Please do
 not contact Evan about maintenance.  Sean Reifschneider of tummy.com,
 ltd. has taken over maintenance of it.
 
-Please report issues and submit code changes to the github repository at:
-
-   https://github.com/linsomniac/python-memcached
-
-For changes prior to 2013-03-26, see the old Launchpad repository at:
-
-   Historic issues: https://launchpad.net/python-memcached
-
-## Testing
-
-Test patches locally and easily by running tox:
-
-    pip install tox
-    tox -e py27
-
-Test for style by running tox:
-
-    tox -e pep8
-
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n python-memcached-%{unmangled_version} -n python-memcached-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Fri Jul 12 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.59-0
+- Update with py2pack
+- Manually add Requires for python-sex, testing Requires
