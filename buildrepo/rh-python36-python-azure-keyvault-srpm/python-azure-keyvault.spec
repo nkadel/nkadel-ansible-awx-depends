@@ -34,7 +34,7 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 Requires:       %{?scl_prefix}python-msrestazure >= 0.4.15
 # Original stanza msrest >= 0.4.17azure-common~=1.1.5
 Requires:       %{?scl_prefix}python-msrest >= 0.4.17
-Requires:       %{?scl_prefix}python-azure-common = 1.1.5
+Requires:       %{?scl_prefix}python-azure-common >= 1.1.5
 Requires:       %{?scl_prefix}python-cryptography >= 2.1.4
 Requires:       %{?scl_prefix}python-requests >= 2.18.4
 %if %{with_dnf}
@@ -203,3 +203,7 @@ rm -rf %{buildroot}
 %{python3_sitelib}/*
 
 %changelog
+* Sun Jul 13 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.1.0a1-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+- python-azure-common updated to >= 1.1.5 from = 1.1.5
