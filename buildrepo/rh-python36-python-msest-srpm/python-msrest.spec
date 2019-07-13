@@ -31,7 +31,8 @@ BuildArch:      noarch
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
-Requires:       %{?scl_prefix}python-requests = 2.14
+#Requires:       %{?scl_prefix}python-requests = 2.14
+Requires:       %{?scl_prefix}python-requests >= 2.14
 Requires:       %{?scl_prefix}python-requests_oauthlib >= 0.5.0
 Requires:       %{?scl_prefix}python-isodate >= 0.6.0
 Requires:       %{?scl_prefix}python-certifi >= 2017.4.17
@@ -85,3 +86,4 @@ rm -rf %{buildroot}
 * Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.4.29-0
 - Update .spec with py2pack
 - Add manual Requires
+- Tune Requires for python-requests to >= 2.14
