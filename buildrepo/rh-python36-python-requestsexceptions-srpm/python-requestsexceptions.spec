@@ -30,6 +30,8 @@ BuildArch:      noarch
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+BuildRequires:  %{?scl_prefix}python-pbr
 %if %{with_dnf}
 # Manually added
 Conflicts:      %{?scl_prefix}python-hacking !=0.13.0
