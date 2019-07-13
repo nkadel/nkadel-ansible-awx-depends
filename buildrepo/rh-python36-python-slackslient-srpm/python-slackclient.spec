@@ -33,10 +33,12 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 # Added manually
 Requires:       %{?scl_prefix}python-websocket-client >= 0.36
 Requires:       %{?scl_prefix}python-websocket-client < 1.0a0
-Requires:       %{?scl_prefix}python-websocket-requests >= 2.11
-Requires:       %{?scl_prefix}python-websocket-requests < 3.0a0
+Requires:       %{?scl_prefix}python-requests >= 2.11
+#Requires:       %{?scl_prefix}python-requests < 3.0a0
+Requires:       %{?scl_prefix}python-requests < 3.0
 Requires:       %{?scl_prefix}python-six >= 1.10
-Requires:       %{?scl_prefix}python-six < 2.0a0
+#Requires:       %{?scl_prefix}python-six < 2.0a0
+Requires:       %{?scl_prefix}python-six < 2.0
 %if %{with_dnf}
 %endif # with_dnf
 
@@ -74,4 +76,5 @@ rm -rf %{buildroot}
 * Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.1.2-0
 - Update .spec file with py2pack
 - Activate Requires manually
+- Refine Requires to discard 'a0' suffix in version
 
