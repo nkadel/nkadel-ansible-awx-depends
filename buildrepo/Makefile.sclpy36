@@ -66,6 +66,7 @@ clean::
 	rm -rf */
 	rm -rf rpmbuild
 	rm -f *.out
+	rm -f *~
 
 realclean distclean:: clean
 	rm -f *.rpm
