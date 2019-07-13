@@ -35,13 +35,12 @@ Requires:       %{?scl_prefix}python-six
 Requires:       %{?scl_prefix}python-pytz
 Requires:       %{?scl_prefix}python-PyJWT >= 1.4.2
 # python <  3.8
-Requires:       %{?scl_prefix}python-requests >= 2.0.0
+#Requires:       %{?scl_prefix}python-requests >= 2.0.0
 # python >=  3.8
-Requires:       %{?scl_prefix}python-requests >= 3.0.0
+#Requires:       %{?scl_prefix}python-requests >= 3.0.0
 Requires:       %{?scl_prefix}python-pysocks
 %if %{with_dnf}
 %endif # with_dnf
-%{?python_provide:%python_provide python-%{pypi_name}}
 
 %description
 Python Twilio Helper Library
@@ -76,3 +75,7 @@ rm -rf %{buildroot}
 %{python3_sitelib}/*
 
 %changelog
+* Fri Jul 12 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 6.10.4-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+- Filter out Requires for distinct python releases
