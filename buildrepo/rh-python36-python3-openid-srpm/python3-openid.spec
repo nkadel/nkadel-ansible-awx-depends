@@ -17,7 +17,8 @@
 %endif
 
 # Common SRPM package
-Name:           %{?scl_prefix}python-%{pypi_name}
+#Name:           %{?scl_prefix}python-%{pypi_name}
+Name:           %{?scl_prefix}%{pypi_name}
 Version:        3.1.0
 Release:        0%{?dist}
 Url:            http://github.com/necaris/python3-openid
@@ -66,3 +67,4 @@ rm -rf %{buildroot}
 * Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 3.1.0-0
 - Update .spec file with py2pack
 - Manually add Requires for defusedxml
+- Adjust "Name" to accomodate python3-openid package name
