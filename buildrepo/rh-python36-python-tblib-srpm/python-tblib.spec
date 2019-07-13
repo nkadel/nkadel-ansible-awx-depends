@@ -31,7 +31,7 @@ BuildArch:      noarch
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
-Requires:       %{?scl_prefix}python-sphinx>=1.3
+Requires:       %{?scl_prefix}python-sphinx >= 1.3
 Requires:       %{?scl_prefix}python-sphinx-py3doc-enhanced-theme
 %if %{with_dnf}
 %endif # with_dnf
