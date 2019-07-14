@@ -18,7 +18,7 @@
 
 # Common SRPM package
 Name:           %{?scl_prefix}python-%{pypi_name}
-Version:        1.11.5
+Version:        1.12.3
 Release:        0%{?dist}
 Url:            http://cffi.readthedocs.org
 Summary:        Foreign Function Interface for Python calling C code.
