@@ -78,7 +78,8 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{python3_sitearch}/*
+# Despite not being noarch, use sitelib
+%{python3_sitelib}/*
 
 %changelog
 * Sat Jul 13 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 3.141.0-0
