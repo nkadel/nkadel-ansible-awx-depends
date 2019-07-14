@@ -32,7 +32,6 @@ BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 %if %{with_dnf}
 %endif # with_dnf
-%{?python_provide:%python_provide python-%{pypi_name}}
 
 %description
 urllib3
