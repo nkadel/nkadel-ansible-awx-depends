@@ -1,96 +1,85 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-netaddr
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name netaddr
-%define version 0.7.19
-%define unmangled_version 0.7.19
-%define unmangled_version 0.7.19
-%define release 1
+%global pypi_name netaddr
 
-Summary: A network address manipulation library for Python
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}%{pkg_name}
-Version: %{version}
-Release: %{release}
-Source0: netaddr-%{unmangled_version}.tar.gz
-License: BSD License
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{pkg_name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Stefan Nordhausen <stefan.nordhausen@immobilienscout24.de>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/drkjam/netaddr/
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        0.7.19
+Release:        0%{?dist}
+Url:            https://github.com/drkjam/netaddr/
+Summary:        A network address manipulation library for Python
+License:        BSD License (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
+Provides support for:
 
-        Provides support for:
+Layer 3 addresses
+-----------------
 
-        Layer 3 addresses
-        -----------------
+- IPv4 and IPv6 addresses, subnets, masks, prefixes
+- iterating, slicing, sorting, summarizing and classifying IP networks
+- dealing with various ranges formats (CIDR, arbitrary ranges and globs, nmap)
+- set based operations (unions, intersections etc) over IP addresses and subnets
+- parsing a large variety of different formats and notations
+- looking up IANA IP block information
+- generating DNS reverse lookups
+- supernetting and subnetting
 
-        - IPv4 and IPv6 addresses, subnets, masks, prefixes
-        - iterating, slicing, sorting, summarizing and classifying IP networks
-        - dealing with various ranges formats (CIDR, arbitrary ranges and globs, nmap)
-        - set based operations (unions, intersections etc) over IP addresses and subnets
-        - parsing a large variety of different formats and notations
-        - looking up IANA IP block information
-        - generating DNS reverse lookups
-        - supernetting and subnetting
+Layer 2 addresses
+-----------------
 
-        Layer 2 addresses
-        -----------------
+- representation and manipulation MAC addresses and EUI-64 identifiers
+- looking up IEEE organisational information (OUI, IAB)
+- generating derived IPv6 addresses
 
-        - representation and manipulation MAC addresses and EUI-64 identifiers
-        - looking up IEEE organisational information (OUI, IAB)
-        - generating derived IPv6 addresses
-
-        Changes
-        -------
-
-        For details on the latest changes and updates, see :-
-
-        http://netaddr.readthedocs.io/en/latest/changes.html
-
-        Requirements
-        ------------
-
-        Supports Python version 2.5 through 3.5
-
-        Share and enjoy!
-
-
+Documentation
+-------------
 
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n netaddr-%{unmangled_version} -n netaddr-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
+%{_bindir}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.7.19-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
