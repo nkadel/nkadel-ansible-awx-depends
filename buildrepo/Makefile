@@ -48,6 +48,8 @@ rh-python36-python-ncclient-srpm::               rh-python36-python-lxml-srpm
 
 rh-python36-python-keystoneauth1-srpm::          rh-python36-pbr-srpm
 rh-python36-python-lockfile-srpm::               rh-python36-pbr-srpm
+rh-python36-python-openstacksdk-srpm::           rh-python36-pbr-srpm
+rh-python36-python-os-service-types::            rh-python36-pbr-srpm
 rh-python36-python-requestsexceptions-srpm::     rh-python36-pbr-srpm
 rh-python36-python-stevedore-srpm::              rh-python36-pbr-srpm
 
@@ -59,6 +61,7 @@ rh-python36-python-cryptography-srpm::           rh-python36-python-pycparser-sr
 rh-python36-python-cryptography-srpm::           rh-python36-python-cffi-srpm
 rh-python36-python-bcrypt-srpm::                 rh-python36-python-cffi-srpm
 rh-python36-python-arg2-cffi-srpm::              rh-python36-python-cffi-srpm
+rh-python36-python-PyNaCl-srpm::                 rh-python36-python-cffi-srpm
 
 # Lots and lots of dependencies, consider using built-in release
 rh-python36-python-ansible-srpm::                rh-python36-python-cryptography-srpm
