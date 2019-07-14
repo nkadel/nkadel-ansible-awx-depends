@@ -1,19 +1,29 @@
-# python3_pkgversion macro for EPEL in older RHEL
-%{!?python3_pkgversion:%global python3_pkgversion 3}
+#
+# spec file for package rh-python36-python-selenium
+#    Based on Fedora python-selenium SRPM
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
 %global upstream_name selenium
 
-Name:          python-%{upstream_name}
+%{?scl:%scl_package python-${upstream_name}}
+%{!?scl:%global pkg_name python-%{upstream_name}}
+
+Name:          %{?scl_prefix}python-%{upstream_name}
 Version:       3.12.0
-Release:       5%{?dist}
+Release:       0%{?dist}
 Summary:       Python bindings for Selenium
 License:       ASL 2.0
 URL:           http://docs.seleniumhq.org/
 Source0:       https://files.pythonhosted.org/packages/source/s/%{upstream_name}/%{upstream_name}-%{version}.tar.gz
+Patch1:        selenium-use-without-bundled-libs.patch
 
 BuildArch:     noarch
+%{?python_provide:%python_provide python-%{upstream_name}}
 
-Patch1:        selenium-use-without-bundled-libs.patch
+BuildRequires: %{?scl_prefix}python-devel
+BuildRequires: %{?scl_prefix}python-setuptools
+Requires:      %{?scl_prefix}python-rdflib
 
 %description
 The selenium package is used automate web browser interaction from Python.
@@ -21,21 +31,6 @@ The selenium package is used automate web browser interaction from Python.
 Several browsers/drivers are supported (Firefox, Chrome, Internet Explorer,
 PhantomJS), as well as the Remote protocol.
 
-
-%package -n python%{python3_pkgversion}-%{upstream_name}
-Summary:       Python bindings for Selenium
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{upstream_name}}
-
-BuildRequires: python%{python3_pkgversion}-devel
-BuildRequires: python%{python3_pkgversion}-setuptools
-Requires:      python%{python3_pkgversion}-rdflib
-BuildArch:     noarch
-
-%description -n python%{python3_pkgversion}-%{upstream_name}
-The selenium package is used automate web browser interaction from Python.
-
-Several browsers/drivers are supported (Firefox, Chrome, Internet Explorer,
-PhantomJS), as well as the Remote protocol.
 
 %prep
 %setup -qn %{upstream_name}-%{version}
@@ -46,18 +41,27 @@ find . -type f -name "*.py" -exec sed -i '1{/^#!/d;}' {} \;
 %patch1 -p2
 
 %build
-%py3_build
+%{?scl:scl enable %{scl} - << \EOF}
+%{__python3} setup.py build
+%{?scl:EOF}
 
 %install
-%py3_install
+%{?scl:scl enable %{scl} - << \EOF}
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{?scl:EOF}
+
+# Clear spurius binaries that confuse python packaging
 rm -f %{buildroot}%{python3_sitelib}/selenium/webdriver/firefox/amd64/x_ignore_nofocus.so
 rm -f %{buildroot}%{python3_sitelib}/selenium/webdriver/firefox/x86/x_ignore_nofocus.so
 
-%files -n python%{python3_pkgversion}-%{upstream_name}
+%files
 %{python3_sitelib}/%{upstream_name}*
 %doc README.rst
 
 %changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 3.12.0-0
+- Activate rh-python36 settings
+
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 3.12.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
