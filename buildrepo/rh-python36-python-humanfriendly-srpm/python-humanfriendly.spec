@@ -1,29 +1,37 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-humanfriendly
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name humanfriendly
-%define version 4.8
-%define unmangled_version 4.8
-%define unmangled_version 4.8
-%define release 1
+%global pypi_name humanfriendly
 
-Summary: Human friendly output for text interfaces using Python
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}humanfriendly
-Version: %{version}
-Release: %{release}
-Source0: humanfriendly-%{unmangled_version}.tar.gz
-License: UNKNOWN
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/humanfriendly-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Peter Odding <peter@peterodding.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://humanfriendly.readthedocs.io
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        4.8
+Release:        0%{?dist}
+Url:            https://humanfriendly.readthedocs.io
+Summary:        Human friendly output for text interfaces using Python
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 humanfriendly: Human friendly input/output in Python
@@ -164,7 +172,7 @@ License
 
 This software is licensed under the `MIT license`_.
 
-© 2018 Peter Odding.
+&#169; 2018 Peter Odding.
 
 .. External references:
 .. _#4: https://github.com/xolox/python-humanfriendly/issues/4
@@ -180,33 +188,30 @@ This software is licensed under the `MIT license`_.
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n humanfriendly-%{unmangled_version} -n humanfriendly-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
+%{_bindir}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 4.8-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+- Manually add _bindir
