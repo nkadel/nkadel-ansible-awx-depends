@@ -1,30 +1,37 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-django-solo
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name django-solo
-%define version 1.1.3
-%define unmangled_version 1.1.3
-%define unmangled_version 1.1.3
-%define release 1
+%global pypi_name django-solo
 
-Summary: django-solo helps working with singletons: things like global settings that you want to edit from the admin site.
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}%{pkg_name}
-Version: %{version}
-Release: %{release}
-Source0: django-solo-%{unmangled_version}.tar.gz
-License: Creative Commons Attribution 3.0 Unported
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{pkg_name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: lazybird <UNKNOWN>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: http://github.com/lazybird/django-solo/
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
 
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        1.1.3
+Release:        0%{?dist}
+Url:            http://github.com/lazybird/django-solo/
+Summary:        django-solo helps working with singletons: things like global settings that you want to edit from the admin site.
+License:        Creative Commons Attribution 3.0 Unported (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 
@@ -277,34 +284,24 @@ Check out the latest development version anonymously with::
     $ git clone git://github.com/lazybird/django-solo.git
 
 
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n django-solo-%{unmangled_version} -n django-solo-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
