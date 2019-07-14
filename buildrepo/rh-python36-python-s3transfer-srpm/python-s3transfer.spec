@@ -33,8 +33,9 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
 Requires:       %{?scl_prefix}python-botocore < 2.0.0
 Requires:       %{?scl_prefix}python-botocore >= 1.3.0
-Requires:       %{?scl_prefix}python-futures < 4.0.0
-Requires:       %{?scl_prefix}python-futures >= 2.2.0
+# Manually disabled, python 3.x has library built in
+#Requires:       %{?scl_prefix}python-futures < 4.0.0
+#Requires:       %{?scl_prefix}python-futures >= 2.2.0
 %if %{with_dnf}
 # Manually added for test
 #Suggests:       %{?scl_prefix}python-nose = 1.3.3
