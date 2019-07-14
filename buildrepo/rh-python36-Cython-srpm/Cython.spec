@@ -23,7 +23,7 @@
 # https://github.com/cython/cython/issues/1548
 %bcond_with tests
 
-Name:           %{?sub_prefix}Cython
+Name:           %{?scl_prefix}Cython
 Version:        0.28.4
 Release:        0%{?dist}
 Summary:        A language for writing Python extension modules
