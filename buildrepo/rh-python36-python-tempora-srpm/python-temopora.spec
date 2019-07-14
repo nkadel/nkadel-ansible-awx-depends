@@ -36,7 +36,7 @@ BuildRequires:  %{?scl_prefix}python-setuptools_scm
 Requires:       %{?scl_prefix}python-six
 Requires:       %{?scl_prefix}python-pytz
 Requires:       %{?scl_prefix}python-sphinx
-Requires:       %{?scl_prefix}python-jaraco.pckageing >= 3.2
+Requires:       %{?scl_prefix}python-jaraco.packaging >= 3.2
 Requires:       %{?scl_prefix}python-rst.linker >= 1.9
 
 %if %{with_dnf}
