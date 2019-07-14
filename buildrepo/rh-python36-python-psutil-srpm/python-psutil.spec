@@ -26,7 +26,6 @@ License:        BSD (FIXME:No SPDX)
 Group:          Development/Languages/Python
 # Stop using py2pack macros, use local macros published by Fedora
 Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
-BuildArch:      noarch
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
@@ -75,9 +74,10 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{python3_sitelib}/*
+%{python3_sitearch}/*
 
 %changelog
 * Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 5.4.3-0
 - Update .spec file with py2pack
 - Add disabled requires for enum34
+- Switch to binary, not noarch
