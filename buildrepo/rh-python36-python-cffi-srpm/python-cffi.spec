@@ -26,8 +26,6 @@ License:        MIT
 Group:          Development/Languages/Python
 # Stop using py2pack macros, use local macros published by Fedora
 Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
-# Manually add epoch to force use of local version
-Epoch: 3
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
