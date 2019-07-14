@@ -1,35 +1,45 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-openstacksdk
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name openstacksdk
-%define version 0.12.0
-%define unmangled_version 0.12.0
-%define unmangled_version 0.12.0
-%define release 1
+%global pypi_name openstacksdk
 
-Summary: An SDK for building applications to work with OpenStack
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}openstacksdk
-Version: %{version}
-Release: %{release}
-Source0: openstacksdk-%{unmangled_version}.tar.gz
-License: UNKNOWN
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/openstacksdk-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: OpenStack <openstack-dev@lists.openstack.org>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: http://developer.openstack.org/sdks/python/openstacksdk/
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        0.31.1
+Release:        0%{?dist}
+Url:            http://developer.openstack.org/sdks/python/openstacksdk/
+Summary:        An SDK for building applications to work with OpenStack
+License:        Apache-2.0
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+BuildRequires:  %{?scl_prefix}python-pbr
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 openstacksdk
 ============
 
-openstacksdk is a client library for for building applications to work
+openstacksdk is a client library for building applications to work
 with OpenStack clouds. The project aims to provide a consistent and
 complete set of interactions with OpenStack's many services, along with
 complete documentation, examples, and tools.
@@ -150,7 +160,7 @@ in the following locations:
 * ``~/.config/openstack``
 * ``/etc/openstack``
 
-More information at https://developer.openstack.org/sdks/python/openstacksdk/users/config
+More information at https://docs.openstack.org/openstacksdk/latest/user/config/configuration.html
 
 openstack.cloud
 ===============
@@ -183,43 +193,40 @@ Create a server using objects configured with the ``clouds.yaml`` file:
 Links
 =====
 
-* `Issue Tracker <https://storyboard.openstack.org/#!/project/760>`_
-* `Code Review <https://review.openstack.org/#/q/status:open+project:openstack/python-openstacksdk,n,z>`_
-* `Documentation <https://developer.openstack.org/sdks/python/openstacksdk/>`_
-* `PyPI <https://pypi.python.org/pypi/python-openstacksdk/>`_
-* `Mailing list <http://lists.openstack.org/cgi-bin/mailman/listinfo/openstack-dev>`_
-* `Bugs <https://bugs.launchpad.net/python-openstacksdk>`_
+* `Issue Tracker <https://storyboard.openstack.org/#!/project/openstack/openstacksdk>`_
+* `Code Review <https://review.opendev.org/#/q/status:open+project:openstack/openstacksdk,n,z>`_
+* `Documentation <https://docs.openstack.org/openstacksdk/latest/>`_
+* `PyPI <https://pypi.org/project/openstacksdk/>`_
+* `Mailing list <http://lists.openstack.org/cgi-bin/mailman/listinfo/openstack-discuss>`_
+* `Release Notes <https://docs.openstack.org/releasenotes/openstacksdk>`_
+
 
 
 
 
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n openstacksdk-%{unmangled_version} -n openstacksdk-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
+%{_bindir}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.31.1-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests, especially python-pbr
+- Add _bindir
