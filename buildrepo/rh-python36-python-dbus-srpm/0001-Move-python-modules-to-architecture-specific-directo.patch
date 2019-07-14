@@ -1,0 +1,37 @@
+diff -up dbus-python-1.2.4/Makefile.am.sitearch dbus-python-1.2.4/Makefile.am
+--- dbus-python-1.2.4/Makefile.am.sitearch	2016-03-06 10:49:12.000000000 -0700
++++ dbus-python-1.2.4/Makefile.am	2016-11-07 10:52:58.176679779 -0700
+@@ -152,7 +152,8 @@ test_dbus_py_test_la_SOURCES = \
+ 
+ # === dbus package ===
+ 
+-nobase_python_PYTHON = \
++dbuspydir = $(pyexecdir)
++nobase_dbuspy_DATA = \
+     dbus/bus.py \
+     dbus/connection.py \
+     dbus/_compat.py \
+@@ -172,12 +173,12 @@ nobase_python_PYTHON = \
+     dbus/types.py
+ 
+ if !HAVE_PYTHON_3
+-nobase_python_PYTHON += \
++nobase_dbuspy_DATA += \
+     dbus/gobject_service.py \
+     $(NULL)
+ endif
+ 
+-check_py_sources = $(nobase_python_PYTHON)
++check_py_sources = $(nobase_dbuspy_DATA)
+ include $(top_srcdir)/tools/check-coding-style.mk
+ 
+ # === Devel stuff ===
+@@ -419,7 +420,7 @@ clean-local:
+ 
+ APIDOC_PYTHONPATH = $(abs_top_srcdir):$(abs_top_builddir)/.libs
+ 
+-api api/index.html: $(nobase_python_PYTHON) \
++api api/index.html: $(nobase_dbuspy_DATA) \
+ 		    _dbus_bindings.la \
+ 		    _dbus_glib_bindings.la
+ 	rm -rf api
