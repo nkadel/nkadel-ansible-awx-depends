@@ -1,6 +1,10 @@
 *.cfg
 *.out
 *.repo
+*.rpm
+*.tar.*
+*.zip
+*[0-9]
 *\#*
 *~
 dependsrepo/
