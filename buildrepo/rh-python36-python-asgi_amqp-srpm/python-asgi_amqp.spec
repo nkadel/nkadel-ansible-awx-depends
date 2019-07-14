@@ -35,7 +35,8 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 Requires:       %{?scl_prefix}python-six
 Requires:       %{?scl_prefix}python-kombu >= 3.0.35
 Requires:       %{?scl_prefix}python-msgpack-python >= 0.4.7
-Requires:       %{?scl_prefix}python-asgiref = 1.1.2
+#Requires:       %{?scl_prefix}python-asgiref = 1.1.2
+Requires:       %{?scl_prefix}python-asgiref >= 1.1.2
 Requires:       %{?scl_prefix}python-jsonpickle >= 0.9.3
 
 %if %{with_dnf}
@@ -119,3 +120,4 @@ rm -rf %{buildroot}
 * Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.1.3-0
 - Update .spec from py2pack
 - Manually add Requires and Suggests
+- Update asgiref to >= 1.1.2, instead of = 1.1.2
