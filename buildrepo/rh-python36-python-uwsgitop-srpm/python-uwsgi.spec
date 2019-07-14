@@ -35,7 +35,6 @@ Requires:       %{?scl_prefix}python-simplejson
 Requires:       %{?scl_prefix}python-argparse
 %if %{with_dnf}
 %endif # with_dnf
-%{?python_provide:%python_provide python-%{pypi_name}}
 
 %description
 uwsgitop is a top-like command that uses the uWSGI Stats Server to
