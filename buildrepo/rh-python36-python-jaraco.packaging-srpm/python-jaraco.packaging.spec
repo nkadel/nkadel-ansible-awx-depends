@@ -129,5 +129,6 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
+%{_bindir}/*
 
 %changelog
