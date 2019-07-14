@@ -33,7 +33,6 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added for check
 Suggests:       %{?scl_prefix}python-unittest2
 %endif # with_dnf
-%{?python_provide:%python_provide python-appdirs}
 
 %description
 the problem
