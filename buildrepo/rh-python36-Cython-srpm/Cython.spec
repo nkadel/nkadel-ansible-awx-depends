@@ -51,7 +51,10 @@ BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 %if %{with tests}
 BuildRequires:  %{?scl_prefix}python-coverage
-BuildRequires:  %{?scl_prefix}python-numpy
+# Manually renamed, because RHEL misnames the python module
+#BuildRequires:  %{?scl_prefix}python-numpy
+BuildRequires:  %{?scl_prefix}numpy
+
 BuildRequires:  %{?scl_prefix}python-jedi
 %endif
 
@@ -111,6 +114,7 @@ rm -rfv %{buildroot}%{python_sitearch}/__pycache__
 - Update to 0.28.4
 - Use "?scl_prefix" instead of "scl_prefix" to allos SRPM building on plain RHEL 7
 - Discard 0001-fix-typo-in-Compiler-Options.py.patch
+- Rename python-numpy module as numpy for rh-python36 compatibility
 
 * Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.25.2-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
@@ -353,4 +357,3 @@ rm -rfv %{buildroot}%{python_sitearch}/__pycache__
 
 * Tue Feb 26 2008 Neal Becker <ndbecker2@gmail.com> - 0.9.6.12-1
 - Initial version
-
