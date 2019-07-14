@@ -36,7 +36,9 @@ Requires:       %{?scl_prefix}python-bcrypt
 Requires:       %{?scl_prefix}python-docutils
 Requires:       %{?scl_prefix}python-geoip2
 Requires:       %{?scl_prefix}python-jinja2 >= 2.9.2
-Requires:       %{?scl_prefix}python-numpy
+# Renamed for compatibility with RHEL misnaming python module
+#Requires:       %{?scl_prefix}python-numpy
+Requires:       %{?scl_prefix}numpy
 Requires:       %{?scl_prefix}python-Pillow
 Requires:       %{?scl_prefix}python-PyYAML
 # pylibmc/libmemcached can't be built on Windows.
@@ -97,4 +99,4 @@ rm -rf %{buildroot}
 - Manually add Requires
 - Manually add _bindir/*
 - Manually add Provides for mixed case python-django packages
-
+- Reset python-numpy Requires to numpy for RHEL naming compatibility
