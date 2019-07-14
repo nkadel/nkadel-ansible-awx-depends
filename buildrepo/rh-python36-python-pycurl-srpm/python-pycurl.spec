@@ -156,10 +156,12 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python3_sitearch}/*
+%doc %{_docdir}/*
 
 %changelog
 * Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 7.43.0.1=0
 - Update .spec from py2pack
 - Manually add Requires and Suggests
 - Add BuldRequires for libcurl-devel
+- Add docdir for autopublished documentation
 
