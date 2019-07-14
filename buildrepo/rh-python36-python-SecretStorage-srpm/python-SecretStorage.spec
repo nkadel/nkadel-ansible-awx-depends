@@ -27,6 +27,10 @@ Group:          Development/Languages/Python
 # Stop using py2pack macros, use local macros published by Fedora
 Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
+# Manually added for mismatched RHEL package names
+Provides:       %{?scl_prefix}python-secretstorage = %{version}-%{release}
+Obsoletes:      %{?scl_prefix}python-secretstorage <= %{version}-%{release}
+Conflicts:      %{?scl_prefix}python-secretstorage <= %{version}-%{release}
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
@@ -144,3 +148,4 @@ rm -rf %{buildroot}
 * Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 2.3.1-0
 = Update .spec file with py2pack
 - Manually add Suggests for python-dbus-python
+- Add Provides for python-secretstorage
