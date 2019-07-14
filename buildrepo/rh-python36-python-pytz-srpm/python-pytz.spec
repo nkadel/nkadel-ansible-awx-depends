@@ -64,3 +64,6 @@ rm -rf %{buildroot}
 %{python3_sitelib}/*
 
 %changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 2018.5-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
