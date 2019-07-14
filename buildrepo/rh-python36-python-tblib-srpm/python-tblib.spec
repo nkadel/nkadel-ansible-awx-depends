@@ -31,7 +31,10 @@ BuildArch:      noarch
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
-Requires:       %{?scl_prefix}python-sphinx >= 1.3
+# Manually rolled back to earlier version for rh-python36 compatibility
+#Requires:       %{?scl_prefix}python-sphinx >= 1.3
+Requires:       %{?scl_prefix}python-sphinx
+
 Requires:       %{?scl_prefix}python-sphinx-py3doc-enhanced-theme
 %if %{with_dnf}
 %endif # with_dnf
@@ -675,3 +678,7 @@ rm -rf %{buildroot}
 %{python3_sitelib}/*
 
 %changelog
+* Sat Jul 12 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.4.0-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+- Roll back python-sphinx version dependency
