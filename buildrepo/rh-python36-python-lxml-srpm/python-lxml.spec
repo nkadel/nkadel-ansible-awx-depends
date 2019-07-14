@@ -35,7 +35,6 @@ BuildRequires:  libxslt-devel
 BuildRequires:  %{?scl_prefix}Cython >= 0.26.1
 %if %{with_dnf}
 %endif # with_dnf
-%{?python_provide:%python_provide python-lxml}
 
 %description
 lxml is a Pythonic, mature binding for the libxml2 and libxslt libraries.  It
