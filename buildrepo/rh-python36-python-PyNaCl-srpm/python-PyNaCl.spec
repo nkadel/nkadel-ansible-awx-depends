@@ -1,28 +1,47 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-PyNaCl
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name PyNaCl
-%define version 1.2.1
-%define unmangled_version 1.2.1
-%define unmangled_version 1.2.1
-%define release 1
+%global pypi_name PyNaCl
 
-Summary: Python binding to the Networking and Cryptography (NaCl) library
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}PyNaCl
-Version: %{version}
-Release: %{release}
-Source0: PyNaCl-%{unmangled_version}.tar.gz
-License: Apache License 2.0
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/PyNaCl-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-Vendor: The PyNaCl developers <cryptography-dev@python.org>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/pyca/pynacl/
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        1.2.1
+Release:        0%{?dist}
+Url:            https://github.com/pyca/pynacl/
+Summary:        Python binding to the Networking and Cryptography (NaCl) library
+License:        Apache-2.0
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+BuildRequires:  %{?scl_prefix}python-cffi >= 1.4.1
+BuildRequires:  %{?scl_prefix}python-six
+%if %{with_dnf}
+#[docs]
+Suggests:       %{?scl_prefix}python-sphinx >= 1.6.5
+Suggests:       %{?scl_prefix}python-sphinx_rtd_theme
+#[tests]
+Suggests:       %{?scl_prefix}python-pytest >= 3.2.1
+Conflicts:      %{?scl_prefix}python-pytest = 3.3.0
+Suggests:       %{?scl_prefix}python-hypothesis >= 3.27.0
+%endif # with_dnf
 
 %description
 ===============================================
@@ -171,35 +190,27 @@ Changelog
   the new docstrings and update your code/imports to match the new
   conventions.
 
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n PyNaCl-%{unmangled_version} -n PyNaCl-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-env CFLAGS="$RPM_OPT_FLAGS" python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.2.1-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
