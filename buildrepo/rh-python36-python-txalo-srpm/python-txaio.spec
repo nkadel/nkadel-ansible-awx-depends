@@ -45,7 +45,6 @@ Suggests:       %{?scl_prefix}python-tox >= 2.1.1
 Suggests:       %{?scl_prefix}python-mock = 1.3.0
 Suggests:       %{?scl_prefix}python-twine >= 1.6.5
 %endif # with_dnf
-%{?python_provide:%python_provide python-%{pypi_name}}
 
 %description
 **txaio** is a helper library for writing code that runs unmodified on
