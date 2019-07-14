@@ -1,30 +1,98 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-celery
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name celery
-%define version 4.2.1
-%define unmangled_version 4.2.1
-%define unmangled_version 4.2.1
-%define release 1
+%global pypi_name celery
 
-Summary: Distributed Task Queue.
-Name: %{?scl_prefix}%{pkg_name}
-Version: %{version}
-Release: %{release}
-Source0: celery-%{unmangled_version}.tar.gz
-License: BSD
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{pkg_name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Ask Solem <ask@celeryproject.org>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Requires: %{?scl_prefix}pytz >= 2016.7 %{?scl_prefix}billiard >= 3.5.0.2 %{?scl_prefix}kombu >= 4.0.2
-Url: http://celeryproject.org
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        4.2.1
+Release:        0%{?dist}
+Url:            http://celeryproject.org
+Summary:        Distributed Task Queue.
+License:        BSD (FIXME:No SPDX)
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+#%{?scl_prefix}python-pytz>dev
+Requires:       %{?scl_prefix}python-pytz
+Requires:       %{?scl_prefix}python-billiard < 3.6.0
+Requires:       %{?scl_prefix}python-billiard >= 3.5.0.2
+Requires:       %{?scl_prefix}python-kombu < 5.0
+Requires:       %{?scl_prefix}python-kombu >= 4.2.0
+
+%if %{with_dnf}
+# [auth]
+Suggests:       %{?scl_prefix}python-pyOpenSSL
+# [cassandra]
+Suggests:       %{?scl_prefix}python-cassandra-driver
+# [consol]
+Suggests:       %{?scl_prefix}python-python-consul
+# [couchbase]
+Suggests:       %{?scl_prefix}python-couchbase
+#[couchbase:platform_python_implementation == "PyPy"]
+Suggests:       %{?scl_prefix}python-couchbase-cffi
+# [couchdb]
+Suggests:       %{?scl_prefix}python-pycouchdb
+# [django]
+Suggests:       %{?scl_prefix}python-Django>=1.8
+# [dynamodb]
+Suggests:       %{?scl_prefix}python-boto3 >= 1.4.6
+# [elasticsearch]
+Suggests:       %{?scl_prefix}python-elasticsearch
+# [eventlet]
+Suggests:       %{?scl_prefix}python-eventlet
+# [gevent]
+Suggests:       %{?scl_prefix}python-gevent
+# [librabbitmq]
+Suggests:       %{?scl_prefix}python-librabbitmq >= 1.5.0
+# [memcache]
+Suggests:       %{?scl_prefix}python-pylibmc
+# [mongodb]
+Suggests:       %{?scl_prefix}python-pymongo>=3.3.0
+# [msgpack]
+Suggests:       %{?scl_prefix}python-msgpack-python >= 0.3.0
+# [pymemcache]
+Suggests:       %{?scl_prefix}python-python-memcached
+# [pyro]
+Suggests:       %{?scl_prefix}python-pyro4
+# [redis]
+Suggests:       %{?scl_prefix}python-redis >= 2.10.5
+# [riak]
+Suggests:       %{?scl_prefix}python-riak >= 2.0
+# [slmq]
+Suggests:       %{?scl_prefix}python-softlayer_messaging>=1.0.3
+# [solar]
+Suggests:       %{?scl_prefix}python-ephem
+# [sqlalchemy]
+Suggests:       %{?scl_prefix}python-sqlalchemy
+# [sqs]
+Suggests:       %{?scl_prefix}python-boto3 >= 1.4.6
+Suggests:       %{?scl_prefix}python-pycurl
+# [tblib]
+Suggests:       %{?scl_prefix}python-tblib >= 1.3.0
+# [yaml]
+Suggests:       %{?scl_prefix}python-PyYAML >= 3.10
+# [zookeeper]
+Suggests:       %{?scl_prefix}python-kazoo >= 1.3.1
+%endif # with_dnf
 
 %description
 .. image:: http://docs.celeryproject.org/en/latest/_images/celery-banner-small.png
@@ -464,7 +532,7 @@ documentation.
 Backers
 -------
 
-Thank you to all our backers! 🙏 [`Become a backer`_]
+Thank you to all our backers! &#128591; [`Become a backer`_]
 
 .. _`Become a backer`: https://opencollective.com/celery#backer
 
@@ -529,33 +597,29 @@ file in the top distribution directory for the full license text.
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n celery-%{unmangled_version} -n celery-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
+%{_bindir}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 4.2.1-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests and _bindir
