@@ -26,21 +26,23 @@ all:: $(MOCKCFGS)
 all:: $(REPODIRS)
 all:: $(DEPENDSPKGS)
 
-getsrc:: /usr/bin/spectool
-# Build and getsrc for locacl OS require scl-utils
 all build getsrc srpm:: /etc/rpm/macros.scl
+getsrc:: /usr/bin/spectool
 
-all build getsrc srpm install clean::
+all:: *srpm
+
+# Build and getsrc for locacl OS require scl-utils
+
+build getsrc srpm install clean::
 	@for name in *srpm; do \
 	     (cd $$name && $(MAKE) $(MFLAGS) $@); \
 	done  
 
-# Dependencies of libraries on other libraries for compilation
-*srpm::
-	(cd $@ && $(MAKE) $(MFLAGS) install install)
-
 # python-lxml requires Cython
 rh-python36-python-lxml-srpm::                   rh-python36-Cython-srpm
+
+rh-python36-python-m2r-srpm::                    rh-python36-python-mistune-srpm
+rh-python36-python-Automat-srpm::                rh-python36-python-m2r-srpm
 
 rh-python36-python-xmlsec-srpm::                 rh-python36-python-lxml-srpm
 rh-python36-python-defusedxml-srpm::             rh-python36-python-lxml-srpm
@@ -106,11 +108,14 @@ rh-python36-python-django-split-settings-srpm::  rh-python36-python-pytest-runne
 rh-python36-pythontacacs_plus-srpm::             rh-python36-python-pytest-runner-srpm
 rh-python36-pyton-apache-libcloud-srpm::         rh-python36-python-pytest-runner-srpm
 
+# Dependencies of libraries on other libraries for compilation
+.PHONY: srpm
+srpm:: *srpm
+.PHONY: *srpm
+*srpm::
+	(cd $@ && $(MAKE) $(MFLAGS) install)
 
 # Actually build in directories
-$(SAMBAPKGS):: FORCE
-	(cd $@ && $(MAKE) $(MLAGS) install)
-
 repos: $(REPOS) $(REPODIRS)
 $(REPOS):
 	install -d -m 755 $@
@@ -128,6 +133,7 @@ cfg:: cfgs
 .PHONY: cfgs
 cfgs: $(CFGS) $(MOCKCFGS)
 
+# Keep metadata very short for local repo
 dependsrepo-7-x86_64.cfg: /etc/mock/epel-7-x86_64.cfg
 	@echo Generating $@ from $?
 	@cat $? > $@
@@ -142,12 +148,11 @@ dependsrepo-7-x86_64.cfg: /etc/mock/epel-7-x86_64.cfg
 	@echo 'baseurl=$(REPOBASE)/dependsrepo/el/7/x86_64/' >> $@
 	@echo 'failovermethod=priority' >> $@
 	@echo 'skip_if_unavailable=False' >> $@
-	@echo 'metadata_expire=3' >> $@
+	@echo 'metadata_expire=1' >> $@
 	@echo 'gpgcheck=0' >> $@
 	@echo '#cost=2000' >> $@
 	@echo '"""' >> $@
-	@uniq -u $@ > $@.out
-	@mv $@.out $@
+	@uniq -u $@ > $@.out && mv $@.out $@
 
 # Enable rh-python36 SCL builds, do not include local packages
 sclpy36-7-x86_64.cfg: /etc/mock/epel-7-x86_64.cfg
@@ -156,9 +161,8 @@ sclpy36-7-x86_64.cfg: /etc/mock/epel-7-x86_64.cfg
 	@sed -i 's/epel-7-x86_64/sclpy36-7-x86_64/g' $@
 	@sed -i "s/= 'install @buildsys-build'/= 'install @buildsys-build rh-python36-build'/g" $@
 	@sed -i 's/^includepkgs=/#includepkgs=/g' $@
-	@mv $@.out $@
 
-$(MOCKCFGS)::
+$(MOCKCFGS):: /etc/mock/$@
 	ln -sf /etc/mock/$@ $@
 
 repo: dependsrepo.repo
@@ -185,7 +189,7 @@ clean::
 	rm -f *.cfg
 	rm -f *.out
 	@for name in $(SAMBAPKGS); do \
-	    $(MAKE) -C $$name clean; \
+	    (cd $$name; $(MAKE) $(MFLAGS) clean); \
 	done
 
 distclean: clean
@@ -200,6 +204,3 @@ maintainer-clean: distclean
 	@for name in $(SAMBAPKGS); do \
 	    (cd $$name; git clean -x -d -f); \
 	done
-
-FORCE::
-
