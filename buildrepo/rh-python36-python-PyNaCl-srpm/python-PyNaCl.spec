@@ -27,6 +27,11 @@ Group:          Development/Languages/Python
 # Stop using py2pack macros, use local macros published by Fedora
 Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 
+# Manually added
+Provides:       %{?scl_prefix}python-pynacl = %{version}-%{release}
+Obsoletes:      %{?scl_prefix}python-pynacl <= %{version}-%{release}
+Conflicts:      %{?scl_prefix}python-pynacl <= %{version}-%{release}
+
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
@@ -213,3 +218,4 @@ rm -rf %{buildroot}
 * Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.2.1-0
 - Update .spec from py2pack
 - Manually add Requires and Suggests
+- Add Provides for python-pynacl
