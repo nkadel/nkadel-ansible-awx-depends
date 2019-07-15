@@ -33,7 +33,7 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added, not in requires files
 BuildRequires:  unzip
 # Manually added
-Requires:  %{?scl_prefix}virtualenv >= 1.7
+Requires:  %{?scl_prefix}python-virtualenv >= 1.7
 Requires:  %{?scl_prefix}python-py >= 1.4.9
 %if %{with_dnf}
 %endif # with_dnf
@@ -78,3 +78,7 @@ rm -rf %{buildroot}
 %{_bindir}/*
 
 %changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.4.2-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+- Adjust virtualenv dependency to python-virtualenv
