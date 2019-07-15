@@ -1,30 +1,43 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
-%define _unpackaged_files_terminate_build 0
+#
+# spec file for package rh-python36-python-azure-mgmt-resource
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name azure-mgmt-resource
-%define version 1.2.2
-%define unmangled_version 1.2.2
-%define unmangled_version 1.2.2
-%define release 2
+%global pypi_name azure-mgmt-resource
 
-Summary: Microsoft Azure Resource Management Client Library for Python
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}azure-mgmt-resource
-Version: %{version}
-Release: %{release}
-Source0: azure-mgmt-resource-%{unmangled_version}.zip
-License: MIT License
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/azure-mgmt-resource-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Microsoft Corporation <azpysdkhelp@microsoft.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/Azure/azure-sdk-for-python
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        1.2.2
+Release:        0%{?dist}
+Url:            https://github.com/Azure/azure-sdk-for-python
+Summary:        Microsoft Azure Resource Management Client Library for Python
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.zip
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+BuildRequires:  unzip
+#Requires:       %{?scl_prefix}python-msrestazure~=0.4.11
+#Requires:       %{?scl_prefix}python-azure-common~=1.1
+Requires:       %{?scl_prefix}python-msrestazure >= 0.4.11
+Requires:       %{?scl_prefix}python-azure-common >= 1.1
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 Microsoft Azure SDK for Python
@@ -37,228 +50,24 @@ replace the old Azure Service Management (ASM).
 
 This package has been tested with Python 2.7, 3.3, 3.4, 3.5 and 3.6.
 
-For the older Azure Service Management (ASM) libraries, see
-`azure-servicemanagement-legacy <https://pypi.python.org/pypi/azure-servicemanagement-legacy>`__ library.
-
-For a more complete set of Azure libraries, see the `azure <https://pypi.python.org/pypi/azure>`__ bundle package.
-
-
-Compatibility
-=============
-
-**IMPORTANT**: If you have an earlier version of the azure package
-(version < 1.0), you should uninstall it before installing this package.
-
-You can check the version using pip:
-
-.. code:: shell
-
-    pip freeze
-
-If you see azure==0.11.0 (or any version below 1.0), uninstall it first:
-
-.. code:: shell
-
-    pip uninstall azure
-
-
-Usage
-=====
-
-For code examples, see `Resource Management 
-<https://azure-sdk-for-python.readthedocs.org/en/latest/resourcemanagement.html>`__
-on readthedocs.org.
-
-
-Provide Feedback
-================
-
-If you encounter any bugs or have suggestions, please file an issue in the
-`Issues <https://github.com/Azure/azure-sdk-for-python/issues>`__
-section of the project.
-
-
-.. :changelog:
-
-Release History
-===============
-
-1.2.2 (2017-10-17)
-++++++++++++++++++
-
-**Bug fixes**
-
-- Unicode strings are valid "subscription_id" in Python 2.7
-- Added some deprecation warnings
-
-1.2.1 (2017-10-06)
-++++++++++++++++++
-
-**Bugfixes**
-
-- "Get" on unkwon policy resources should raise and not return None
-
-1.2.0 (2017-10-05)
-++++++++++++++++++
-
-**Features**
-
-- Add validate_move_resources
-- Add mode and metadata to PolicyDefinition
-- Add policy_definitions.get_built_in
-- Add policy_definitions.list_built_in
-- Add policy_definitions.create_or_update_at_management_group
-- Add policy_definitions.delete_at_management_group
-- Add policy_definitions.get_at_management_group
-- Add policy_definitions.list_by_management_group
-
-- Add preview version of Policy 2017-06-01-preview:
-
-  - Add policy_set_definitions operations group
-  - Add policy set definitions to policy_assignments operations group
-  - Add skus to policy assignment
-
-**Bug fixes**
-
-- Do not fail on 204 when deleting a policy assignment (2016-12-01)
-
-**Breaking changes to preview clients**
-
-* Major renaming into ManagedApplication client, and GA ApiVersion 2017-09-01
-
-**Disclaimer**
-
-- We removed the "filter" parameter of policy_definitions.list method. 
-  However, we don't upgrade the  major version of the package, since this parameter has no meaning 
-  for the RestAPI and there is no way any Python users would have been able to use it anyway.
-
-1.1.0 (2017-05-15)
-++++++++++++++++++
-
-- Tag 1.1.0rc2 as stable (same content)
-
-1.1.0rc2 (2017-05-12)
-+++++++++++++++++++++
-
-- Add Policy ApiVersion 2015-10-01-preview (AzureStack default)
-
-1.1.0rc1 (2017-05-08)
-+++++++++++++++++++++
-
-- New default ApiVersion is now 2017-05-10. Breaking changes described in 1.0.0rc3 are now applied by default.
-
-1.0.0rc3 (2017-05-04)
-+++++++++++++++++++++
-
-**Bug fixes**
-
-- Subscriptions: Removed deprecated tenant ID
-- Managed Applications: All list methods return an iterator
-
-**New Resources ApiVersion 2017-05-10**
-
-- Deploy resources to multiple resource groups from one template
-- Some breaking changes are introduced compared to previous versions:
-
-   - deployments.list has been renamed deployments.list_by_resource_group
-   - resource_groups.list_resources has been moved to resources.list_by_resource_group
-   - resource_groups.patch has been renamed to resource_groups.update and now takes an instance of ResourceGroupPatchable (and not ResourceGroup).
-
-The default is still 2016-09-01 in this package, waiting for the ApiVersion to be widely available.
-
-1.0.0rc2 (2017-05-02)
-+++++++++++++++++++++
-
-- Add Managed Applications client (preview)
-
-1.0.0rc1 (2017-04-11)
-+++++++++++++++++++++
-
-**Bug fixes**
-
-- tag_count is now correctly an int and not a string
-- deployment_properties is now required for all deployments operations as expected
-
-**Breaking Changes**
-
-- Locks moves to a new ApiVersion and brings several consistent naming refactoring and new methods
-
-**Features**
-
-To help customers with sovereign clouds (not general Azure),
-this version has official multi ApiVersion support for the following resource type:
-
-- Locks: 2015-01-01 and 2016-09-01
-- Policy: 2016-04-01 and 2016-12-01
-- Resources: 2016-02-01 and 2016-09-01
-
-The following resource types support one ApiVersion:
-
-- Features: 2015-12-01
-- Links: 2016-09-01
-- Subscriptions: 2016-06-01
-
-0.31.0 (2016-11-10)
-+++++++++++++++++++
-
-**Breaking change**
-
-- Resource.Links 'create_or_update' method has simpler parameters
-
-0.30.2 (2016-10-20)
-+++++++++++++++++++
-
-**Features**
-
-- Add Resource.Links client
-
-
-0.30.1 (2016-10-17)
-+++++++++++++++++++
-
-**Bugfixes**
-
-- Location is now correctly declared optional and not required.
-
-0.30.0 (2016-10-04)
-+++++++++++++++++++
-
-* Preview release. Based on API version 2016-09-01.
-
-0.20.0 (2015-08-31)
-+++++++++++++++++++
-
-* Initial preview release. Based on API version 2014-04-01-preview
-
-
-
 %prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n azure-mgmt-resource-%{unmangled_version} -n azure-mgmt-resource-%{unmangled_version}
-%{?scl:EOF}
-
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-cat INSTALLED_FILES |grep -v "/opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/azure/__pycache__" |grep -v "/opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/azure/__init__.py" > INSTALLED_FILES_WITHOUT_COMMON_PYCACHE
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES_WITHOUT_COMMON_PYCACHE
-%defattr(-,root,root)
+%changelog

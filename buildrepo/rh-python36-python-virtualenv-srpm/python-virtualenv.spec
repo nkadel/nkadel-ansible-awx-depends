@@ -18,7 +18,7 @@
 
 # Common SRPM package
 Name:           %{?scl_prefix}python-%{pypi_name}
-Version:        16.6.1
+Version:        15.1.0
 Release:        0%{?dist}
 Url:            https://virtualenv.pypa.io/
 Summary:        Virtual Python Environment builder
@@ -34,37 +34,42 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 %endif # with_dnf
 
 %description
-virtualenv
+Virtualenv
 ==========
 
-A tool for creating isolated 'virtual' python environments.
+`Mailing list <http://groups.google.com/group/python-virtualenv>`_ |
+`Issues <https://github.com/pypa/virtualenv/issues>`_ |
+`Github <https://github.com/pypa/virtualenv>`_ |
+`PyPI <https://pypi.python.org/pypi/virtualenv/>`_ |
+User IRC: #pypa
+Dev IRC: #pypa-dev
 
-.. image:: https://img.shields.io/pypi/v/virtualenv.svg
-  :target: https://pypi.org/project/virtualenv
-  :alt: Latest version on PyPi
-.. image:: https://img.shields.io/pypi/pyversions/virtualenv.svg
-  :target: https://pypi.org/project/virtualenv/
-  :alt: Supported Python versions
-.. image:: https://dev.azure.com/pypa/virtualenv/_apis/build/status/pypa.virtualenv?branchName=master
-  :target: https://dev.azure.com/pypa/virtualenv/_build/latest?definitionId=11&branchName=master
-  :alt: Azure Pipelines build status
-.. image:: https://readthedocs.org/projects/virtualenv/badge/?version=latest&style=flat-square
-  :target: https://virtualenv.readthedocs.io/en/latest/?badge=latest
-  :alt: Documentation status
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-  :target: https://github.com/ambv/black
-  :alt: Code style: black
+Introduction
+------------
 
-* `Installation <https://virtualenv.pypa.io/en/latest/installation.html>`_
-* `Documentation <https://virtualenv.pypa.io/>`_
-* `Changelog <https://virtualenv.pypa.io/en/latest/changes.html>`_
-* `Issues <https://github.com/pypa/virtualenv/issues>`_
-* `PyPI <https://pypi.org/project/virtualenv/>`_
-* `Github <https://github.com/pypa/virtualenv>`_
-* `User mailing list <http://groups.google.com/group/python-virtualenv>`_
-* `Dev mailing list <http://groups.google.com/group/pypa-dev>`_
-* User IRC: `#pypa on Freenode <https://webchat.freenode.net/?channels=%23pypa>`_
-* Dev IRC: `#pypa-dev on Freenode <https://webchat.freenode.net/?channels=%23pypa-dev>`_
+``virtualenv`` is a tool to create isolated Python environments.
+
+The basic problem being addressed is one of dependencies and versions,
+and indirectly permissions. Imagine you have an application that
+needs version 1 of LibFoo, but another application requires version
+2. How can you use both these applications?  If you install
+everything into ``/usr/lib/python2.7/site-packages`` (or whatever your
+platform's standard location is), it's easy to end up in a situation
+where you unintentionally upgrade an application that shouldn't be
+upgraded.
+
+Or more generally, what if you want to install an application *and
+leave it be*?  If an application works, any change in its libraries or
+the versions of those libraries can break the application.
+
+Also, what if you can't install packages into the global
+``site-packages`` directory?  For instance, on a shared host.
+
+In all these cases, ``virtualenv`` can help you. It creates an
+environment that has its own installation directories, that doesn't
+share libraries with other virtualenv environments (and optionally
+doesn't access the globally installed libraries either).
+
 
 
 %prep
@@ -86,9 +91,6 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
+%{_bindir}/*
 
 %changelog
-* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 16.6.1-0
-- Update .spec from py2pack
-- Manually add Requires and Suggests
-
