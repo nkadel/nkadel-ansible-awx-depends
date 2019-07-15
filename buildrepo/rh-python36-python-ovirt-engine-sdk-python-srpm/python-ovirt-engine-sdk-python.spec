@@ -33,7 +33,8 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 BuildRequires:  libxml2-devel
 Requires:       %{?scl_prefix}python-pycurl >= 7.19.0
 Requires:       %{?scl_prefix}python-six
-Requires:       %{?scl_prefix}python-enum34
+# Disabled for python > 2.7
+#Requires:       %{?scl_prefix}python-enum34
 %if %{with_dnf}
 %endif # with_dnf
 
@@ -73,3 +74,8 @@ rm -rf %{buildroot}
 %{python3_sitearch}/*
 
 %changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.10-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+- Disable enum34 requirement
+
