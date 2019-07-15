@@ -67,18 +67,6 @@ A tool for creating isolated 'virtual' python environments.
 * Dev IRC: `#pypa-dev on Freenode <https://webchat.freenode.net/?channels=%23pypa-dev>`_
 
 
-Code of Conduct
----------------
-
-Everyone interacting in the virtualenv project's codebases, issue trackers,
-chat rooms, and mailing lists is expected to follow the
-`PyPA Code of Conduct`_.
-
-.. _PyPA Code of Conduct: https://www.pypa.io/en/latest/code-of-conduct/
-
-
-
-
 %prep
 %setup -q -n %{pypi_name}-%{version}
 
@@ -100,3 +88,7 @@ rm -rf %{buildroot}
 %{python3_sitelib}/*
 
 %changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 16.6.1-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+
