@@ -43,6 +43,24 @@ rh-python36-python-lxml-srpm::                   rh-python36-Cython-srpm
 
 rh-python36-python-m2r-srpm::                    rh-python36-python-mistune-srpm
 rh-python36-python-Automat-srpm::                rh-python36-python-m2r-srpm
+rh-python36-python-Automat-srpm::                rh-python36-python-setuptools_scm-srpm
+
+# setuptools_scm is not explicitly in "requires" lists because even to read
+# the lists, you need this installed first
+rh-python36-python-irc-srpm::                    rh-python36-python-setuptools_scm-srpm
+rh-python36-python-jaraco.classes-srpm::         rh-python36-python-setuptools_scm-srpm
+rh-python36-python-jaraco.collections-srpm::     rh-python36-python-setuptools_scm-srpm
+rh-python36-python-jaraco.functools-srpm::       rh-python36-python-setuptools_scm-srpm
+rh-python36-python-jaraco.itertools-srpm::       rh-python36-python-setuptools_scm-srpm
+rh-python36-python-jaraco.logging-srpm::         rh-python36-python-setuptools_scm-srpm
+rh-python36-python-jaraco.stream-srpm::          rh-python36-python-setuptools_scm-srpm
+rh-python36-python-jaraco.text-srpm::            rh-python36-python-setuptools_scm-srpm
+rh-python36-python-keyring-srpm::                rh-python36-python-setuptools_scm-srpm
+rh-python36-python-py-srpm::                     rh-python36-python-setuptools_scm-srpm
+rh-python36-python-pytest-runner-srpm::          rh-python36-python-setuptools_scm-srpm
+rh-python36-python-rst.linker-srpm::             rh-python36-python-setuptools_scm-srpm
+rh-python36-python-tempora-srpm::                rh-python36-python-setuptools_scm-srpm
+rh-python36-python-tox-srpm::                    rh-python36-python-setuptools_scm-srpm
 
 rh-python36-python-xmlsec-srpm::                 rh-python36-python-lxml-srpm
 rh-python36-python-defusedxml-srpm::             rh-python36-python-lxml-srpm
@@ -85,23 +103,6 @@ rh-python36-python-baron-srpm::                  rh-python36-python-pypandoc-srp
 rh-python36-python-Twisted-srpm::                rh-python36-python-incremental-srpm
 
 rh-python36-python-django-taggit-srpm::          rh-python36-python-isort-srpm
-
-# setuptools_scm is not explicitly in "requires" lists because even to read
-# the lists, you need this installed first
-rh-python36-python-irc-srpm::                    rh-python36-python-setuptools_scm-srpm
-rh-python36-python-jaraco.classes-srpm::         rh-python36-python-setuptools_scm-srpm
-rh-python36-python-jaraco.collections-srpm::     rh-python36-python-setuptools_scm-srpm
-rh-python36-python-jaraco.functools-srpm::       rh-python36-python-setuptools_scm-srpm
-rh-python36-python-jaraco.itertools-srpm::       rh-python36-python-setuptools_scm-srpm
-rh-python36-python-jaraco.logging-srpm::         rh-python36-python-setuptools_scm-srpm
-rh-python36-python-jaraco.stream-srpm::          rh-python36-python-setuptools_scm-srpm
-rh-python36-python-jaraco.text-srpm::            rh-python36-python-setuptools_scm-srpm
-rh-python36-python-keyring-srpm::                rh-python36-python-setuptools_scm-srpm
-rh-python36-python-py-srpm::                     rh-python36-python-setuptools_scm-srpm
-rh-python36-python-pytest-runner-srpm::          rh-python36-python-setuptools_scm-srpm
-rh-python36-python-rst.linker-srpm::             rh-python36-python-setuptools_scm-srpm
-rh-python36-python-tempora-srpm::                rh-python36-python-setuptools_scm-srpm
-rh-python36-python-tox-srpm::                    rh-python36-python-setuptools_scm-srpm
 
 rh-python36-python-django-crum-srpm::            rh-python36-python-pytest-runner-srpm
 rh-python36-python-django-split-settings-srpm::  rh-python36-python-pytest-runner-srpm
