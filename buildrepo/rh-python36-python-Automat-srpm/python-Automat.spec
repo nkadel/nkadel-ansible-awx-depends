@@ -31,6 +31,7 @@ BuildArch:      noarch
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
+BuildRequires:  %{?scl_prefix}python-setuptools_scm
 BuildRequires:  %{?scl_prefix}python-m2r
 Requires:       %{?scl_prefix}python-attrs
 Requires:       %{?scl_prefix}python-m2r
@@ -115,10 +116,11 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
+%{_bindir}/*
 
 %changelog
 * Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.6.0-0
 - Update .spec from py2pack
-- Manually add Requires and Suggests
+- Manually add Requires and Suggests and _bindir
 - Manually add BuildRequires for python-m2r
 
