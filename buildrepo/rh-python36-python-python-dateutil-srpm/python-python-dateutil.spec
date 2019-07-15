@@ -27,6 +27,10 @@ Group:          Development/Languages/Python
 # Stop using py2pack macros, use local macros published by Fedora
 Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
+# Manually added
+Provides:       %{?scl_prefix}python-dateutil = %{version}-%{release}
+Obsoletes:      %{?scl_prefix}python-dateutil <= %{version}-%{release}
+Conflicts:      %{?scl_prefix}python-dateutil <= %{version}-%{release}
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
@@ -65,3 +69,5 @@ rm -rf %{buildroot}
 %changelog
 * Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 2.6.1-0
 - Update .spec file with py2pack
+- Add Provides for python-dateutil
+
