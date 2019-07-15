@@ -35,23 +35,23 @@ BuildRequires:  libcurl-devel
 Requires:       %{?scl_prefix}python-bottle
 # nose 1.3.1 is broken on python 3:
 # https://github.com/nose-devs/nose/issues/780
-Requires:       %{?scl_prefix}python-nose>=1.3.2
+Requires:       %{?scl_prefix}python-nose >= 1.3.2
 # flaky 2.2.0 is not installable on python 3.1.5,
 # install it manually
 Requires:       %{?scl_prefix}python-pyflakes
 Requires:       %{?scl_prefix}python-nose-show-skipped
 
 %if %{with_dnf}
-bottle
+Suggests:       %{?scl_prefix}python-bottle
 # nose 1.3.1 is broken on python 3:
 # https://github.com/nose-devs/nose/issues/780
-nose>=1.3.2
-flaky
-pyflakes
-nose-show-skipped
+Suggests:       %{?scl_prefix}python-nose>=1.3.2
+Suggests:       %{?scl_prefix}python-flaky
+Suggests:       %{?scl_prefix}python-pyflakes
+Suggests:       %{?scl_prefix}python-nose-show-skipped
 # for python 2.6
-#unittest2
-#sphinx
+#Suggests:       %{?scl_prefix}python-unittest2
+#Suggests:       %{?scl_prefix}python-sphinx
 %endif # with_dnf
 
 %description
