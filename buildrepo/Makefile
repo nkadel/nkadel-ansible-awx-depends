@@ -258,7 +258,7 @@ rh-python36-python-shade-srpm::	rh-python36-python-os-client-config-srpm
 rh-python36-python-shade-srpm::	rh-python36-python-pbr-srpm
 rh-python36-python-slackclient-srpm::	rh-python36-python-requests-srpm
 rh-python36-python-slackclient-srpm::	rh-python36-python-six-srpm
-rh-python36-python-slackclient-srpm::	rh-python36-python-websocket-client-srpm
+rh-python36-python-slackclient-srpm::	rh-python36-python-websocket_client-srpm
 rh-python36-python-social-auth-app-django-srpm::	rh-python36-python-six-srpm
 rh-python36-python-social-auth-app-django-srpm::	rh-python36-python-social-auth-core-srpm
 rh-python36-python-social-auth-core-srpm::	rh-python36-python-PyJWT-srpm
