@@ -1,29 +1,46 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
+#
+# spec file for package rh-python36-python-service_identity
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name service_identity
-%define version 17.0.0
-%define unmangled_version 17.0.0
-%define unmangled_version 17.0.0
-%define release 1
+%global pypi_name service_identity
 
-Summary: Service identity verification for pyOpenSSL.
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}%{pkg_name}
-Version: %{version}
-Release: %{release}
-Source0: service_identity-%{unmangled_version}.tar.gz
-License: MIT
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{pkg_name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Hynek Schlawack <hs@ox.cx>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://service-identity.readthedocs.io/
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        17.0.0
+Release:        0%{?dist}
+Url:            https://service-identity.readthedocs.io/
+Summary:        Service identity verification for pyOpenSSL.
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+Requires:       %{?scl_prefix}python-attrs
+Requires:       %{?scl_prefix}python-pyasn1
+Requires:       %{?scl_prefix}python-pyasn1-modules
+Requires:       %{?scl_prefix}python-pyopenssl >= 0.12
+%if %{with_dnf}
+#[idna]
+Suggests:       %{?scl_prefix}python-idna
+# Manually added for docs
+Suggests:       %{?scl_prefix}python-sphinx
+%endif # with_dnf
 
 %description
 =============================
@@ -49,7 +66,7 @@ Service Identity Verification
 
 Use this package if:
 
-- you use pyOpenSSL_ and don’t want to be MITM_\ ed or
+- you use pyOpenSSL_ and don&#8217;t want to be MITM_\ ed or
 - if you want to verify that a `PyCA cryptography`_ certificate is valid for a certain hostname.
 
 ``service_identity`` aspires to give you all the tools you need for verifying whether a certificate is valid for the intended purposes.
@@ -57,7 +74,7 @@ Use this package if:
 In the simplest case, this means *host name verification*.
 However, ``service_identity`` implements `RFC 6125`_ fully and plans to add other relevant RFCs too.
 
-``service_identity``\ ’s documentation lives at `Read the Docs <https://service-identity.readthedocs.io/>`_, the code on `GitHub <https://github.com/pyca/service_identity>`_.
+``service_identity``\ &#8217;s documentation lives at `Read the Docs <https://service-identity.readthedocs.io/>`_, the code on `GitHub <https://github.com/pyca/service_identity>`_.
 
 
 .. _Twisted: https://twistedmatrix.com/
@@ -104,33 +121,28 @@ Other contributors can be found in `GitHub's overview <https://github.com/pyca/s
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n service_identity-%{unmangled_version} -n service_identity-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES
-%defattr(-,root,root)
+%changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.10-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
