@@ -32,7 +32,8 @@ BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
 Requires:       %{?scl_prefix}python-requests >= 1.2.0
-Requires:       %{?scl_prefix}python-futures >= 2.1.3
+# Disable requirement on pyton > 3.0
+#Requires:       %{?scl_prefix}python-futures >= 2.1.3
 %if %{with_dnf}
 %endif # with_dnf
 
@@ -69,3 +70,4 @@ rm -rf %{buildroot}
 * Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com>
 - Update .spec file with py2pack
 - Manually add Requires
+- Disable Requires for python-futures on python > 3.0-
