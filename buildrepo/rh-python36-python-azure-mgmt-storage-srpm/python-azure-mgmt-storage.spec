@@ -1,30 +1,44 @@
-%define scl rh-python36
-%{?scl:%scl_package %{name}}
-%{!?scl:%global pkg_name %{name}}
-%define _unpackaged_files_terminate_build 0
+#
+# spec file for package rh-python36-python-azure-mgmt-storage
+#
+# Copyright (c) 2019 Nico Kadel-Garcia.
+#
 
-%define name azure-mgmt-storage
-%define version 1.5.0
-%define unmangled_version 1.5.0
-%define unmangled_version 1.5.0
-%define release 2
+%global pypi_name azure-mgmt-storage
 
-Summary: Microsoft Azure Storage Management Client Library for Python
-%{?scl:Requires: %{scl}-runtime}
-%{?scl:BuildRequires: %{scl}-runtime}
-Name: %{?scl_prefix}azure-mgmt-storage
-Version: %{version}
-Release: %{release}
-Source0: azure-mgmt-storage-%{unmangled_version}.zip
-License: MIT License
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/azure-mgmt-storage-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
-BuildArch: noarch
-Vendor: Microsoft Corporation <azpysdkhelp@microsoft.com>
-Packager: Martin Juhl <m@rtinjuhl.dk>
-Url: https://github.com/Azure/azure-sdk-for-python
+%{?scl:%scl_package python-%{pypi_name}}
+%{!?scl:%global pkg_name python-%{pypi_name}}
 
+# Older RHEL does not use dnf, does not support "Suggests"
+%if 0%{?fedora} || 0%{?rhel} > 7
+%global with_dnf 1
+%else
+%global with_dnf 0
+%endif
+
+# Common SRPM package
+Name:           %{?scl_prefix}python-%{pypi_name}
+Version:        1.5.0
+Release:        0%{?dist}
+Url:            https://github.com/Azure/azure-sdk-for-python
+Summary:        Microsoft Azure Storage Management Client Library for Python
+License:        MIT
+Group:          Development/Languages/Python
+# Stop using py2pack macros, use local macros published by Fedora
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.zip
+BuildArch:      noarch
+
+BuildRequires:  %{?scl_prefix}python-devel
+BuildRequires:  %{?scl_prefix}python-setuptools
+# Manually added
+BuildRequires:  unzip
+#Requires:       %{?scl_prefix}python-msrestazure~=0.4.11
+#Requires:       %{?scl_prefix}python-azure-common~=1.1
+Requires:       %{?scl_prefix}python-msrestazure >= 0.4.11
+Requires:       %{?scl_prefix}python-azure-common >= 1.1
+
+%if %{with_dnf}
+%endif # with_dnf
 
 %description
 Microsoft Azure SDK for Python
@@ -168,33 +182,25 @@ Based on API version 2016-12-01.
 
 
 
-%prep
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-%setup -n azure-mgmt-storage-%{unmangled_version} -n azure-mgmt-storage-%{unmangled_version}
-%{?scl:EOF}
 
+%prep
+%setup -q -n %{pypi_name}-%{version}
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py build
+%{__python3} setup.py build
 %{?scl:EOF}
-
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-set -ex
-python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 %{?scl:EOF}
-cat INSTALLED_FILES |grep -v "/opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/azure/__pycache__" |grep -v "/opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/azure/__init__.py" |grep -v "/opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/azure/mgmt/__pycache__" |grep -v "/opt/rh/rh-python36/root/usr/lib/python3.6/site-packages/azure/mgmt/__init__.py" > INSTALLED_FILES_WITHOUT_COMMON_PYCACHE
 
 %clean
-%{?scl:scl enable %{scl} - << \EOF}
-set -ex
-rm -rf $RPM_BUILD_ROOT
-%{?scl:EOF}
+rm -rf %{buildroot}
 
+%files
+%defattr(-,root,root,-)
+%{python3_sitelib}/*
 
-%files -f INSTALLED_FILES_WITHOUT_COMMON_PYCACHE
-%defattr(-,root,root)
+%changelog
