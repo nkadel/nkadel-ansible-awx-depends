@@ -18,7 +18,7 @@
 
 # Common SRPM package
 Name:           %{?scl_prefix}python-%{pypi_name}
-Version:        1.0.0a1
+Version:        1.1.0
 Release:        0%{?dist}
 Url:            https://github.com/Azure/azure-sdk-for-python
 Summary:        Microsoft Azure Key Vault Client Library for Python
@@ -32,8 +32,9 @@ BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
 Requires:       %{?scl_prefix}python-msrestazure >= 0.4.15
+Requires:       %{?scl_prefix}python-msrestazure < 2.0.0
 # Original stanza msrest >= 0.4.17azure-common~=1.1.5
-Requires:       %{?scl_prefix}python-msrest >= 0.4.17
+Requires:       %{?scl_prefix}python-msrest >= 0.5.0
 Requires:       %{?scl_prefix}python-azure-common >= 1.1.5
 Requires:       %{?scl_prefix}python-cryptography >= 2.1.4
 Requires:       %{?scl_prefix}python-requests >= 2.18.4
@@ -187,12 +188,12 @@ Release History
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py build
+%{py_build}
 %{?scl:EOF}
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{py_install}
 %{?scl:EOF}
 
 %clean
@@ -203,7 +204,7 @@ rm -rf %{buildroot}
 %{python3_sitelib}/*
 
 %changelog
-* Sun Jul 13 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.1.0a1-0
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.1.0-0
 - Update .spec from py2pack
 - Manually add Requires and Suggests
 - python-azure-common updated to >= 1.1.5 from = 1.1.5
