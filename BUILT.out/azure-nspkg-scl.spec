@@ -60,7 +60,6 @@ python3 setup.py build
 set -ex
 python3 setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 %{?scl:EOF}
-cat INSTALLED_FILES |grep -v "%{python3_sitelib}/azure/__pycache__" |grep -v "%{python3_sitelib}/azure/__init__.py" |grep -v "%{python3_sitelib}/azure/mgmt/__pycache__" |grep -v "%{python3_sitelib}/azure/mgmt/__init__.py" > INSTALLED_FILES_WITHOUT_COMMON_PYCACHE
 
 %clean
 %{?scl:scl enable %{scl} - << \EOF}
@@ -71,3 +70,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f INSTALLED_FILES_WITHOUT_COMMON_PYCACHE
 %defattr(-,root,root)
+%exclude %{python3_sitelib}/azure/__pycache__
+%exclude %{python3_sitelib}/azure/__init__.py
+%exclude %{python3_sitelib}/azure/mgmt/__pycache__
+%exclude %{python3_sitelib}/azure/mgmt/__init__.py
+
