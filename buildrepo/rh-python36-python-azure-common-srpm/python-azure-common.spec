@@ -18,7 +18,7 @@
 
 # Common SRPM package
 Name:           %{?scl_prefix}python-%{pypi_name}
-Version:        1.1.11
+Version:        1.1.23
 Release:        0%{?dist}
 Url:            https://github.com/Azure/azure-sdk-for-python
 Summary:        Microsoft Azure Client Library for Python (Common)
@@ -30,10 +30,10 @@ BuildArch:      noarch
 
 BuildRequires:  %{?scl_prefix}python-devel
 BuildRequires:  %{?scl_prefix}python-setuptools
+#[:python_version<'3.0']
+#Requires:       %{?scl_prefix}python-azure-nspkg
 %if %{with_dnf}
 # [autorest]
-Suggests: %{?scl_prefix}python-msrestazure < 2.0.0
-Suggests: %{?scl_prefix}python-msrestazure >= 0.4.0
 %endif # with_dnf
 
 %description
@@ -146,12 +146,12 @@ Initial release, extracted from azure==0.11.1
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py build
+%{py_build}
 %{?scl:EOF}
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{py_install}
 %{?scl:EOF}
 
 %clean

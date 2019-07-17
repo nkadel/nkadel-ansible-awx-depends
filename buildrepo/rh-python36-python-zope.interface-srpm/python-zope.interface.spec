@@ -30,14 +30,14 @@ This is a separate distribution of the zope.interface package used in Zope 3.
 %build
 %{?scl:scl enable %{scl} - << \EOF}
 set -ex
-env CFLAGS="$RPM_OPT_FLAGS" %{__python3} setup.py build
+env CFLAGS="$RPM_OPT_FLAGS" %{py_build
 %{?scl:EOF}
 
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
 set -ex
-%{__python3} setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{py_install}
 %{?scl:EOF}
 
 

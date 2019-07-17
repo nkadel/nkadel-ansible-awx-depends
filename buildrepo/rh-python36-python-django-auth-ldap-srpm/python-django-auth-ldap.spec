@@ -60,12 +60,12 @@ This version is supported on Python 2.7 and 3.4+; and Django 1.11+. It requires
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py build
+%{py_build}
 %{?scl:EOF}
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{py_install}
 %{?scl:EOF}
 
 %clean

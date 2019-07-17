@@ -24,14 +24,14 @@ The ADAL for Python library makes it easy for python application to authenticate
 %build
 %{?scl:scl enable %{scl} - << \EOF}
 set -ex
-%{__python3} setup.py build
+%{py_build}
 %{?scl:EOF}
 
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
 set -ex
-%{__python3} setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{py_install}
 %{?scl:EOF}
 
 

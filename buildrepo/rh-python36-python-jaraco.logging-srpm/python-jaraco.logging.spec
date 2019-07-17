@@ -18,7 +18,7 @@
 
 # Common SRPM package
 Name:           %{?scl_prefix}python-%{pypi_name}
-Version:        1.5.1
+Version:        2.0
 Release:        0%{?dist}
 Url:            https://github.com/jaraco/jaraco.logging
 Summary:        jaraco.logging
@@ -38,12 +38,13 @@ Requires:       %{?scl_prefix}python-six
 %if %{with_dnf}
 # Manually added for docs
 Suggests:       %{?scl_prefix}python-sphinx
-Suggests:       %{?scl_prefix}python-jaraco.packaging>=3.2
-Suggests:       %{?scl_prefix}python-rst.linker>=1.9
+Suggests:       %{?scl_prefix}python-jaraco.packaging >= 3.2
+Suggests:       %{?scl_prefix}python-rst.linker >= 1.9
 # Manually added for testing
-Suggests:       %{?scl_prefix}python-pytest>=2.8
-Suggests:       %{?scl_prefix}python-pytest-sugar
-Suggests:       %{?scl_prefix}python-collective.checkdocs
+Suggests:       %{?scl_prefix}python-pytest >= 3.6
+Conflicts:       %{?scl_prefix}python-pytest = 3.7.3
+Suggests:       %{?scl_prefix}python-checkdocs
+Suggests:       %{?scl_prefix}python-flake8
 %endif # with_dnf
 
 %description
@@ -76,12 +77,12 @@ Quickly solicit log level info from command-line parameters::
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py build
+%{py_build}
 %{?scl:EOF}
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{py_install}
 %{?scl:EOF}
 
 %clean

@@ -44,12 +44,12 @@ Pure-Python implementation of ASN.1 types and DER/BER/CER codecs (X.208)
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py build
+%{py_build}
 %{?scl:EOF}
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{py_install}
 %{?scl:EOF}
 
 %clean

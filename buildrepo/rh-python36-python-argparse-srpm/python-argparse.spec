@@ -92,12 +92,12 @@ If it does not happen there, file a bug in the argparse package issue tracker.
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py build
+%{py_build}
 %{?scl:EOF}
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{py_install}
 %{?scl:EOF}
 
 %clean

@@ -55,14 +55,14 @@ rm -rf %{pypi_name}.egg-info
 %build
 %{?scl:scl enable %{scl} - << \EOF}
 set -ex
-%{__python3} setup.py build
+%{py_build}
 %{?scl:EOF}
 
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
 set -ex
-%{__python3} setup.py install --skip-build --root %{buildroot}
+%{py_install}
 %{?scl:EOF}
 
 

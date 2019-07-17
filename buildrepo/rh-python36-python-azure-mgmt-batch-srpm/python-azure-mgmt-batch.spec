@@ -33,8 +33,10 @@ BuildRequires:  %{?scl_prefix}python-setuptools
 # Manually added
 # Manually added
 BuildRequires:  unzip
-Requires:       %{?scl_prefix}python-msrestazure = 0.4.7
-Requires:       %{?scl_prefix}python-azure-common = 1.1.5
+#Requires:       %{?scl_prefix}python-msrestazure~=0.4.7
+#Requires:       %{?scl_prefix}python-azure-common~=1.1.5
+Requires:       %{?scl_prefix}python-msrestazure >= 0.4.7
+Requires:       %{?scl_prefix}python-azure-common >= 1.1.5
 %if %{with_dnf}
 %endif # with_dnf
 
@@ -139,12 +141,12 @@ Release History
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py build
+%{py_build}
 %{?scl:EOF}
 
 %install
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python3} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{py_install}
 %{?scl:EOF}
 
 %clean

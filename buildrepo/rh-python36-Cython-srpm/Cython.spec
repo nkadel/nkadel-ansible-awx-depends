@@ -71,7 +71,7 @@ for writing Python extension modules.
 
 %build
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python} setup.py build
+%{py_build}
 rm -rfv %{buildroot}%{python_sitearch}/__pycache__
 %{?scl:EOF}
 
@@ -81,7 +81,7 @@ rm -rfv %{buildroot}%{python_sitearch}/__pycache__
 # to be the default for now).
 
 %{?scl:scl enable %{scl} - << \EOF}
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+%{py_install}
 rm -rf %{buildroot}%{python_sitelib}/setuptools/tests
 rm -rfv %{buildroot}%{python_sitearch}/__pycache__
 %{?scl:EOF}
