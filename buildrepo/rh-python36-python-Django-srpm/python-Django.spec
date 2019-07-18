@@ -18,7 +18,7 @@
 
 # Common SRPM package
 Name:           %{?scl_prefix}python-%{pypi_name}
-Version:        1.11.16
+Version:        1.11.20
 Release:        0%{?dist}
 Url:            https://www.djangoproject.com/
 Summary:        A high-level Python Web framework that encourages rapid development and clean, pragmatic design.
@@ -40,6 +40,7 @@ Requires:       %{?scl_prefix}python-jinja2 >= 2.9.2
 #Requires:       %{?scl_prefix}python-numpy
 Requires:       %{?scl_prefix}numpy
 Requires:       %{?scl_prefix}python-Pillow
+Conflicts:      %{?scl_prefix}python-Pillow = 5.4.0
 Requires:       %{?scl_prefix}python-PyYAML
 # pylibmc/libmemcached can't be built on Windows.
 Requires:       %{?scl_prefix}python-pylibmc
@@ -58,6 +59,7 @@ Requires:       %{?scl_prefix}python-tblib
 Suggests:         %{?scl_prefix}python-psycopg2-binary >= 2.5.4
 # Manually added from mysql.txt
 Suggests:         %{?scl_prefix}python-mysqlclient >= 1.3.7
+Suggests:         %{?scl_prefix}python-mysqlclient < 1.3.14
 # Manually added for argon2
 Suggests:         %{?scl_prefix}python-argon2-cffi >= 16.1.0
 # Manually added for bcrypt
@@ -94,6 +96,9 @@ rm -rf %{buildroot}
 %{_bindir}/*
 
 %changelog
+* Thu Jul 18 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.11.20-0
+- Update to 1.11.20 for awx-build dependency
+
 * Sat Jul 6 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.11.16-0
 - Update .spec file with py2pack
 - Manually add Requires
