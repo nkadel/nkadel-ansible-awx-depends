@@ -130,5 +130,12 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
 %{_bindir}/*
+%exclude %{python3_sitelib}/jaraco/__init__.py
+%exclude %{python3_sitelib}/jaraco/__pycache__
 
 %changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 6.1-0
+- Update .spec with py2pack
+- Manually add Requires
+- Manually exclude cross-duplicated files
+- Manually exclude cross-duplicated files

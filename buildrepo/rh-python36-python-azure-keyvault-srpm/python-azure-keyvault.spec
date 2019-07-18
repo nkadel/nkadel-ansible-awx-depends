@@ -202,9 +202,13 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
+# Manually exclude cross-duplicated files
+%exclude %{python3_sitelib}/azure/__init__.py
+%exclude %{python3_sitelib}/azure/__pycache__
 
 %changelog
 * Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.1.0-0
 - Update .spec from py2pack
 - Manually add Requires and Suggests
 - python-azure-common updated to >= 1.1.5 from = 1.1.5
+- Manually exclude cross-duplicated files

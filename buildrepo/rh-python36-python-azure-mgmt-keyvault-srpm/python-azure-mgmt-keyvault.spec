@@ -144,5 +144,14 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
+# Manually ignore cross-package replicated files
+%exclude %{python3_sitelib}/azure/__pycache__*
+%exclude %{python3_sitelib}/azure/__init__.py
+%exclude %{python3_sitelib}/azure/msmt/__pycache__*
+%exclude %{python3_sitelib}/azure/mgmt/__init__.py
 
 %changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.40.0-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+- Manually ignore cross-package replicated files

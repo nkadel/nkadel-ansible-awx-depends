@@ -91,8 +91,11 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
+%exclude %{python3_sitelib}/jaraco/__init__.py
+%exclude %{python3_sitelib}/jaraco/__pycache__
 
 %changelog
 * Sun Jul 7 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 1.5.1-0
 - Update .spec with pywpach
 - Manually add Requires and Suggests
+- Manually exclude cross-duplicated files

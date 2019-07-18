@@ -234,5 +234,13 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python3_sitelib}/*
+%exclude %{python3_sitelib}/azure/__init__.py
+%exclude %{python3_sitelib}/azure/__pycache__
+%exclude %{python3_sitelib}/azure/mgmt/__init__.py
+%exclude %{python3_sitelib}/azure/mgmt/__pycache__
 
 %changelog
+* Sun Jul 14 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.5.2-0
+- Update .spec from py2pack
+- Manually add Requires and Suggests
+- Manually exclude cross-duplicated files
